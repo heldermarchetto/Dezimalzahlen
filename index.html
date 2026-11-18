@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dezimalzahlen: Rechnen lernen und üben (Mathematik Klasse 6, DFU)</title>
+<style>
+:root{
+  --bg:#f6f1e7; --card:#fffdf8; --ink:#22303c; --mut:#6b7785; --line:#e2d9c8;
+  --acc:#1f6f78; --acc2:#f2a900; --ok:#2f9e44; --okbg:#e6f6ea; --err:#c92a2a; --errbg:#fdecec;
+  --k:#1c6fd1; --ms:#d6336c; --wh:#2f9e44; --mp:#e8590c; --par:#7048e8;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3{line-height:1.2;margin:.2em 0 .5em}
+h1{font-size:1.7rem} h2{font-size:1.35rem} h3{font-size:1.1rem}
+#top{position:sticky;top:0;z-index:20;background:var(--acc);color:#fff;display:flex;align-items:center;gap:.6rem;padding:.5rem .9rem;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+#top .brand{font-weight:700;font-size:1.1rem;cursor:pointer;margin-right:auto;display:flex;align-items:center;gap:.4rem}
+#top .pill{background:rgba(255,255,255,.16);border-radius:99px;padding:.2rem .7rem;font-size:.92rem;white-space:nowrap}
+#top .pill.star{background:#fff;color:#7a5200;font-weight:700}
+#top button{background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:99px;padding:.2rem .7rem;cursor:pointer;font-size:.9rem}
+main{max-width:1120px;margin:0 auto;padding:1rem .9rem 4rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;box-shadow:0 1px 3px rgba(60,40,0,.06)}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:.65rem 1.1rem;font-weight:600;cursor:pointer;min-height:46px}
+.btn:active{transform:translateY(1px)}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.small{min-height:38px;padding:.35rem .8rem;font-size:.95rem}
+.btn[disabled]{opacity:.45;cursor:default}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.mut{color:var(--mut)} .en{color:var(--mut);font-style:italic;font-size:.92em}
+.crumb{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap}
+.crumb h2{margin:0}
+/* Login */
+.login{max-width:560px;margin:1.5rem auto}
+.login label{display:block;font-weight:600;margin:.9rem 0 .25rem}
+.login input,.login select{width:100%;padding:.7rem .8rem;border:2px solid var(--line);border-radius:12px;background:#fff;font-size:1.05rem}
+.login input:focus{outline:none;border-color:var(--acc)}
+/* Home */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.9rem}
+.st{cursor:pointer;display:flex;gap:.9rem;align-items:flex-start;transition:transform .12s}
+.st:hover{transform:translateY(-2px)}
+.st .ico{font-size:2rem;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;background:#eaf3f3;flex:none}
+.st h3{margin:0}
+.bar{height:9px;border-radius:9px;background:#ece4d4;overflow:hidden;margin-top:.5rem}
+.bar i{display:block;height:100%;background:var(--acc2);border-radius:9px}
+.stars{letter-spacing:1px;font-size:1.05rem}
+.stars .off{filter:grayscale(1);opacity:.28}
+.tasklist{display:grid;gap:.6rem}
+.task{display:flex;align-items:center;gap:.8rem;cursor:pointer}
+.task .n{width:38px;height:38px;border-radius:50%;background:#eaf3f3;display:grid;place-items:center;font-weight:700;flex:none}
+.task.done .n{background:#fff3cd}
+.task .go{margin-left:auto;color:var(--acc);font-weight:700}
+.hero{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem}
+.hero .big{font-size:2.2rem;font-weight:800;color:#7a5200}
+/* Layout for board tasks */
+.two{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:1rem;align-items:start}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.board{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:14px;touch-action:none;user-select:none;-webkit-user-select:none}
+.panel{display:grid;gap:.7rem}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:.7rem .85rem}
+.merk{background:#fff8e1;border:2px solid var(--acc2);border-radius:12px;padding:.7rem .85rem}
+.merk b.t{display:block;color:#7a5200;margin-bottom:.15rem}
+.fb{min-height:1.2rem;border-radius:12px;padding:.6rem .8rem;font-weight:600}
+.fb:empty{padding:0}
+.fb.ok{background:var(--okbg);color:#1b6b2f}
+.fb.err{background:var(--errbg);color:var(--err)}
+.fb.info{background:#e8f1f8;color:#1d4f73}
+.read{display:grid;gap:.35rem}
+.read div{display:flex;justify-content:space-between;background:#f3efe6;border-radius:10px;padding:.4rem .7rem;font-variant-numeric:tabular-nums}
+.read div b{font-size:1.1rem}
+.read.good div{background:var(--okbg);color:#1b6b2f}
+.dots{display:flex;gap:.3rem;flex-wrap:wrap}
+.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--acc);display:block}
+.dots i.on{background:var(--acc)}
+ol.steps{margin:0;padding-left:1.4rem;display:grid;gap:.35rem}
+ol.steps li{padding:.3rem .5rem;border-radius:8px;color:var(--mut)}
+ol.steps li.cur{background:#e8f1f8;color:var(--ink);font-weight:600}
+ol.steps li.fin::marker{color:var(--ok)}
+.ctl{display:grid;gap:.5rem}
+.slid{display:flex;align-items:center;gap:.5rem}
+.slid input[type=range]{flex:1;height:38px}
+.slid .pm{width:44px;height:44px;border-radius:50%;border:2px solid var(--acc);background:#fff;color:var(--acc);font-weight:800;font-size:1.2rem;cursor:pointer}
+.val{font-weight:800;font-size:1.25rem;text-align:center;font-variant-numeric:tabular-nums}
+.opts{display:grid;gap:.5rem}
+.opt{text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:.65rem .8rem;cursor:pointer;min-height:46px}
+.opt:hover{border-color:var(--acc)}
+.opt.right{background:var(--okbg);border-color:var(--ok)}
+.opt.wrong{background:var(--errbg);border-color:var(--err);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.q{font-weight:700;font-size:1.1rem;margin-bottom:.5rem}
+/* Glossary */
+.gl{border-bottom:2px dotted var(--acc);cursor:help}
+#pop{position:fixed;z-index:50;background:#22303c;color:#fff;padding:.4rem .7rem;border-radius:10px;font-size:.95rem;max-width:260px;display:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#toast{position:fixed;left:50%;top:76px;transform:translateX(-50%);z-index:60;background:#fff3cd;border:2px solid var(--acc2);color:#7a5200;font-weight:800;font-size:1.2rem;padding:.6rem 1.2rem;border-radius:99px;display:none;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+#toast.show{display:block;animation:pop .5s}
+@keyframes pop{0%{transform:translateX(-50%) scale(.5)}60%{transform:translateX(-50%) scale(1.15)}100%{transform:translateX(-50%) scale(1)}}
+.donebox{margin-top:1rem;border:2px solid var(--acc2);background:#fffaf0}
+/* Words */
+.flash{max-width:560px;margin:0 auto;text-align:center}
+.flash .w{font-size:1.8rem;font-weight:800}
+.flash svg,.pic svg{width:200px;height:150px;max-width:100%}
+.art-der{color:#1c6fd1}.art-die{color:#d6336c}.art-das{color:#2f9e44}
+.tiles{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;min-height:54px}
+.tile{background:#fff;border:2px solid var(--acc);border-radius:10px;padding:.5rem .8rem;font-weight:700;cursor:pointer;font-size:1.1rem;min-height:46px}
+.tile.used{opacity:.25;pointer-events:none}
+.build{min-height:58px;border:2px dashed var(--line);border-radius:12px;padding:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;align-items:center;background:#fff;font-size:1.2rem;font-weight:700}
+.inp{width:100%;max-width:460px;padding:.7rem .8rem;border:2px solid var(--line);border-radius:12px;font-size:1.3rem;text-align:center;background:#fff;letter-spacing:.5px}
+.inp:focus{outline:none;border-color:var(--acc)}
+.mask{font:700 1.7rem ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px}
+.center{text-align:center;display:grid;gap:.8rem;justify-items:center}
+.prog{font-size:.92rem;color:var(--mut)}
+.sort{display:grid;gap:.4rem}
+.sort .it{display:flex;align-items:center;gap:.5rem;background:#fff;border:2px solid var(--line);border-radius:12px;padding:.45rem .6rem}
+.sort .it span{flex:1}
+.sort .it button{width:40px;height:40px;border-radius:10px;border:2px solid var(--acc);background:#fff;color:var(--acc);font-weight:800;cursor:pointer}
+.sort .it.right{border-color:var(--ok);background:var(--okbg)}
+.sort .it.wrong{border-color:var(--err);background:var(--errbg)}
+select.gap{font-weight:700;border:2px solid var(--acc);border-radius:8px;padding:.2rem .3rem;background:#fff;margin:.15rem 0}
+select.gap.right{border-color:var(--ok);background:var(--okbg)} select.gap.wrong{border-color:var(--err);background:var(--errbg)}
+.gaptext{line-height:2.3}
+/* SVG board styles (1 cm = 100 units) */
+.board .g1{stroke:#dfe7ee;stroke-width:1.5} .board .g2{stroke:#eef3f7;stroke-width:1}
+.board line,.board circle,.board path,.board polyline,.board polygon{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.board .giv{stroke:#22303c;stroke-width:5}
+.board .aux{stroke:#8793a0;stroke-width:3;stroke-dasharray:14 12}
+.board .thin{stroke:#8793a0;stroke-width:3}
+.board .k{stroke:var(--k);stroke-width:5} .board .ms{stroke:var(--ms);stroke-width:5}
+.board .wh{stroke:var(--wh);stroke-width:5} .board .mp{stroke:var(--mp);stroke-width:5}
+.board .par{stroke:var(--par);stroke-width:5}
+.board .tri{stroke:#22303c;stroke-width:6;fill:rgba(242,169,0,.18)}
+.board .sol{stroke:var(--acc2);stroke-width:16;opacity:.75}
+.board .fillk{fill:rgba(28,111,209,.12);stroke:none}
+.board .pv{stroke:var(--acc);stroke-width:4;stroke-dasharray:10 10}
+.board .dot{fill:#22303c;stroke:#fff;stroke-width:3}
+.board .dot.open{fill:#fff;stroke:#22303c;stroke-width:5}
+.board .dot.sol{fill:var(--acc2);stroke:#7a5200;stroke-width:4;opacity:1}
+.board .dot.mk{fill:var(--ok);stroke:#fff;stroke-width:3}
+.board .dot.q{fill:#fff;stroke:var(--acc);stroke-width:5}
+.board text{font:600 38px "Avenir Next","Segoe UI",system-ui,sans-serif;fill:#22303c;stroke:none;paint-order:stroke}
+.board text.h{stroke:#fff;stroke-width:9px}
+.board text.c-k{fill:var(--k)} .board text.c-ms{fill:var(--ms)} .board text.c-wh{fill:var(--wh)} .board text.c-mp{fill:var(--mp)} .board text.c-par{fill:var(--par)} .board text.c-acc{fill:var(--acc)}
+.board .hot{fill:rgba(31,111,120,.001);stroke:rgba(31,111,120,.35);stroke-width:4;stroke-dasharray:10 9;cursor:pointer}
+.board .hot:hover{fill:rgba(31,111,120,.12)}
+.board .handle{fill:var(--acc2);stroke:#7a5200;stroke-width:5;cursor:grab}
+.board .anim{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cert{text-align:center;border:3px double var(--acc2)}
+.hud{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-bottom:.7rem;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:.55rem .8rem}
+.pill2{background:#f3efe6;border-radius:99px;padding:.15rem .65rem;font-weight:700;font-size:.92rem;white-space:nowrap}
+.pill2.bad{background:var(--errbg);color:var(--err)} .pill2.fire{background:#fff3cd;color:#a14b00}
+.dotsrow i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-left:3px;vertical-align:middle} .dotsrow i.g{background:var(--ok)} .dotsrow i.r{background:var(--err)}
+.item{animation:fadein .25s} @keyframes fadein{from{opacity:0;transform:translateY(6px)}}
+.again{margin-top:.35rem;font-weight:500;font-size:.92rem}
+.narrow{max-width:680px;margin:0 auto;display:grid;gap:.7rem}
+.rowopts{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.stmt{display:inline-block;margin-top:.3rem;font-size:1.25rem;background:#f3efe6;border-radius:10px;padding:.2rem .7rem}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip{border:2px solid var(--line);background:#fff;border-radius:99px;padding:.45rem .85rem;font-weight:600;cursor:pointer;min-height:44px}
+.chip.on{border-color:var(--acc);background:#dff0f1;color:var(--acc)}
+.chip.right{border-color:var(--ok);background:var(--okbg);color:#1b6b2f} .chip.wrong{border-color:var(--err);background:var(--errbg);color:var(--err);text-decoration:line-through} .chip.miss{border-color:var(--acc2);background:#fff3cd;color:#7a5200}
+.big{font-size:1.9rem;font-weight:800} .bigstars .stars{font-size:2.6rem;letter-spacing:6px}
+.weak{margin-top:1rem;display:grid;gap:.5rem;border-color:var(--acc2)}
+.word{text-align:center;font:800 3rem "Arial","Helvetica",sans-serif;letter-spacing:.12em;color:var(--ink)}
+.word span{display:inline-block} .word.mir{color:var(--ms)} .word.ms span{transform:scaleX(-1)} .word.mw span{transform:scaleY(-1)}
+.heftcard{display:grid;gap:.7rem;font-size:1.05rem}
+ol.instr{margin:.35rem 0 0;padding-left:1.4rem;display:grid;gap:.4rem}
+.shot img{max-width:100%;max-height:420px;border-radius:12px;border:1px solid var(--line);display:block;margin:0 auto}
+.inp{font-size:1.2rem}
+/* Karopapier */
+.board.karo{background:#fff}
+.board .kg{stroke:#cfe0ee;stroke-width:1.2}
+.board.tappable{cursor:pointer}
+.board .kl{stroke:#22303c;stroke-width:3;fill:none;stroke-linecap:round}
+.board .kl.thick{stroke-width:4.5}
+.board .kl.c1{stroke:#1c6fd1} .board .kl.c2{stroke:#d6336c}
+.board .kl.axis{stroke:#e03131;stroke-width:3;stroke-dasharray:12 7}
+.board .kl.res{stroke:var(--ok);stroke-width:4}
+.board .kl.ghost{stroke:var(--ok);stroke-width:3;stroke-dasharray:8 7}
+.board .kl.wrongline{stroke:var(--err);stroke-width:3;stroke-dasharray:6 6}
+.board .kl.help{stroke:#8793a0;stroke-width:2;stroke-dasharray:6 6}
+.board .kl.hl1{stroke:var(--acc2);stroke-width:9;opacity:.75} .board .kl.hl2{stroke:#7048e8;stroke-width:9;opacity:.6}
+.board .kp{stroke-width:3.5;stroke-linejoin:round}
+.board .kp.c1{stroke:#1c6fd1;fill:rgba(28,111,209,.10)} .board .kp.c2{stroke:#d6336c;fill:rgba(214,51,108,.12)}
+.board .kd{fill:#22303c;stroke:#fff;stroke-width:2.5}
+.board .kd.acc{fill:var(--acc)} .board .kd.c2{fill:#d6336c} .board .kd.ok{fill:var(--ok)} .board .kd.z{fill:#e8590c}
+.board .kt{font:700 22px "Avenir Next","Segoe UI",system-ui,sans-serif;fill:#22303c;stroke:#fff;stroke-width:6px;paint-order:stroke}
+.board .kt.c-c1{fill:#1c6fd1} .board .kt.c-c2{fill:#d6336c} .board .kt.c-axis{fill:#e03131} .board .kt.c-acc{fill:var(--acc)} .board .kt.c-ok{fill:var(--ok)} .board .kt.c-z{fill:#e8590c}
+.board .kra path{fill:none;stroke:#22303c;stroke-width:2} .board .kra circle{fill:#22303c}
+.board .ghostra path{stroke:var(--ok)} .board .ghostra circle{fill:var(--ok)}
+.board .kring{fill:rgba(31,111,120,.12);stroke:var(--acc);stroke-width:3}
+.board .kring.bad{fill:rgba(201,42,42,.18);stroke:var(--err)}
+.board .kring.sol,.board .kring.cur{fill:rgba(242,169,0,.3);stroke:var(--acc2);animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.35}}
+.board .anim2{stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw2 1s forwards} @keyframes draw2{to{stroke-dashoffset:0}}
+.board.plainb{background:#fff;max-width:300px;margin:0 auto}
+.board .letter{font:700 220px Arial,Helvetica,sans-serif;fill:#1c6fd1}
+.board .letax{stroke:#e03131;stroke-width:4;stroke-dasharray:14 9}
+.ghostrot{opacity:.55;transition:transform 1.4s ease;transform-box:view-box}
+.ghostrot.go{transform:rotate(180deg)}
+.ghostrot text,.ghostrot polygon,.ghostrot circle{fill:rgba(214,51,108,.35)!important;stroke:#d6336c!important}
+/* Dezimalzahlen */
+.bar.goal{position:relative}
+.bar.goal b{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--acc2);border-radius:2px}
+.legend{margin:.8rem 0;font-size:.98rem;border-color:var(--acc2)}
+.lvl{display:inline-block;font-size:.8rem;font-weight:700;border-radius:99px;padding:0 .5rem;background:#eef2f6;color:#4a5866;vertical-align:middle}
+.lvl.hard{background:#fde8e8;color:#a61b1b}
+.hardnote{background:#fff3cd;border:1px solid #f0d58a;color:#6b4a00;border-radius:12px;padding:.5rem .8rem;margin-bottom:.7rem}
+.task.k-learn{border-left:6px solid var(--acc)} .task.k-test{border-left:6px solid var(--acc2)} .task.k-heft{border-left:6px solid #d6336c}
+.exprrow{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.expr{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.inp.ans{font-size:1.5rem;width:9rem;text-align:center;font-weight:700}
+.inp.right{border-color:var(--ok);background:var(--okbg)} .inp.wrong{border-color:var(--err);background:var(--errbg)}
+.pm{font-size:1.3rem;min-width:46px}
+.stmtbig{font-size:1.5rem;font-weight:700;background:#f7f4ec;border-radius:12px;padding:.5rem .9rem;display:inline-block;line-height:1.5}
+.prebox{overflow-x:auto}
+.solbox{margin-top:.5rem;background:#fff;border-radius:10px;padding:.4rem;display:inline-block}
+.chain{font-size:1.3rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}.chain span{color:var(--mut);font-size:1.05rem}
+.frac{font-size:1.5em}
+.ov{text-decoration:overline}
+table.kg{border-collapse:collapse;margin:.5rem 0;background:#fff;font:600 1.25rem "Courier New",monospace;
+  background-image:linear-gradient(#cfe0ee 1px,transparent 1px),linear-gradient(90deg,#cfe0ee 1px,transparent 1px);background-size:30px 30px}
+table.kg td{width:30px;height:30px;padding:0;text-align:center;position:relative;color:#1d2b3a}
+table.kg td .cm{position:absolute;right:-4px;bottom:-2px;font-style:normal;font-weight:800;color:#1d2b3a}
+table.kg tr.u td{border-bottom:2.5px solid #1d2b3a}
+table.kg tr.carry td{font-size:.85rem;color:#d6336c;height:18px;vertical-align:top}
+table.kg tr.res td{color:#1c6fd1}
+.opt table.kg{margin:0 auto}
+.lnav{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
+.ldot{border:2px solid var(--line);background:#fff;border-radius:12px;padding:.25rem .5rem;min-width:52px;cursor:pointer;font-size:1.05rem;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.ldot small{font-size:.75rem;color:var(--mut)}
+.ldot.on{border-color:var(--acc);background:#dff0f1}
+.ldot.done{background:var(--okbg);border-color:var(--ok)}
+.ldot.must{border-color:var(--err);box-shadow:0 0 0 2px var(--errbg)}
+.lcard{font-size:1.07rem;line-height:1.55}
+.lcard h3{margin-top:0}
+.ltext table.tbl{margin:.5rem 0}
+.pflicht{background:var(--errbg);color:#8a1c1c;border-radius:10px;padding:.5rem .8rem;margin-bottom:.6rem}
+.heftbox{background:#fff;border:2px solid #b8cbe0;border-radius:10px;padding:.8rem 1rem;line-height:1.7;margin:.6rem 0;
+  background-image:linear-gradient(#e3edf7 1px,transparent 1px),linear-gradient(90deg,#e3edf7 1px,transparent 1px);background-size:22px 22px}
+.rules{background:#fff8e1;border:1px solid #f0d58a;border-radius:10px;padding:.5rem .8rem;margin:.4rem 0;font-size:.98rem}
+.fotocard{margin-top:.6rem}
+.heftcard{display:grid;gap:.6rem}
+.shot img{max-width:100%;max-height:420px;border-radius:12px;border:1px solid var(--line);display:block;margin:0 auto}
+.chk{display:flex;gap:.55rem;align-items:flex-start;padding:.3rem 0;cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;margin-top:.15rem;accent-color:var(--acc)}
+/* Zeichnen */
+.phases{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
+.ph{flex:1;min-width:150px;border:2px solid var(--line);background:#fff;border-radius:12px;padding:.55rem;font-weight:700;cursor:pointer;min-height:46px}
+.ph.on{border-color:var(--acc);background:var(--acc);color:#fff}
+.ph.ok::after{content:' ✅'}
+.ph[disabled]{opacity:.4;cursor:default}
+.two.draw{grid-template-columns:minmax(0,1.9fr) minmax(260px,1fr)}
+@media(max-width:900px){.two.draw{grid-template-columns:1fr}}
+.tools{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem;align-items:center}
+.tool{border:2px solid var(--line);background:#fff;border-radius:12px;padding:.25rem .55rem;min-height:46px;display:flex;align-items:center;gap:.3rem;font-weight:600;font-size:.92rem;cursor:pointer;color:var(--ink)}
+.tool svg{width:24px;height:24px;flex:none}
+.tool.on{border-color:var(--acc);background:#dff0f1;color:var(--acc)}
+.tools .sep{flex:1}
+.thelp{margin-top:.45rem;background:#e8f1f8;color:#1d4f73;border-radius:10px;padding:.45rem .7rem;font-size:.95rem;min-height:2.2rem}
+ol.instr{margin:.35rem 0 0;padding-left:1.4rem;display:grid;gap:.3rem}
+ol.instr li.heft{color:var(--mut)}
+.tag{display:inline-block;font-size:.78rem;background:#f3efe6;border-radius:99px;padding:0 .45rem;color:#7a5200;font-style:normal}
+.heftcard{display:grid;gap:.7rem;font-size:1.05rem}
+.heftcard ol.instr{gap:.5rem}
+.board.mini{margin-top:.5rem}
+.shot img{max-width:100%;max-height:440px;border-radius:12px;border:1px solid var(--line);display:block;margin:0 auto}
+.board .uc{stroke:#6a9be0;stroke-width:3} .board .uc2{stroke:#6a9be0;stroke-width:3}
+.board .ul{stroke:#5d6875;stroke-width:3.5}
+.board .ux{stroke:var(--acc);stroke-width:5} .board .ux2{stroke:#c2410c;stroke-width:7}
+.board .res{stroke:#22303c;stroke-width:6}
+.board .sel{stroke:var(--acc2);stroke-width:14;opacity:.55}
+.board .snap{fill:rgba(242,169,0,.25);stroke:var(--acc2);stroke-width:4}
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="brand" id="brand">🔢 Dezimalzahlen</div>
+  <span class="pill" id="who" hidden></span>
+  <span class="pill" id="cloud" hidden title="Speicher-Status"></span>
+  <span class="pill star" id="starcount" hidden>⭐ 0</span>
+  <button id="logout" hidden>Abmelden</button>
+</header>
+<main id="main"></main>
+<div id="toast"></div>
+<div id="pop"></div>
+<script>
+'use strict';
+/* =====================================================================
+   EINSTELLUNGEN FÜR DIE LEHRKRAFT
+   Die Seite arbeitet mit dem „Fortschritt-Server“ (Google Sheet + Code.gs).
+   Die Server-ID kommt normalerweise aus dem Link:  ...?u=7a-03&s=<Server-ID>
+   (so stehen die Links auf den Zugangskarten / QR-Codes).
+   SERVER_ID : optional fest eintragen (Teil der Web-App-URL zwischen /s/ und /exec).
+               Ohne Server-ID wird nur auf dem Gerät gespeichert.
+   APP_ID    : Name der Seite im Sheet (Blatt „📊 <APP_ID>“ und Zeile in „Seiten“).
+   ===================================================================== */
+const CONFIG = {
+  SERVER_ID: '',
+  APP_ID: 'k6-dezimalzahlen',
+  TITEL: 'Rechnen mit Dezimalzahlen (Mathematik 6)'
+};
+const QS = new URLSearchParams(location.search);
+const SERVER_ID = (QS.get('s') || CONFIG.SERVER_ID || '').replace(/[^A-Za-z0-9_-]/g, '');
+const SERVER_URL = SERVER_ID ? 'https://script.google.com/macros/s/' + SERVER_ID + '/exec' : '';
+const PAGE_LINK = /^https:/.test(location.href) ? location.origin + location.pathname : '';
+
+/* ---------- kleine Helfer ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+function el(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  if (typeof props === 'string') e.innerHTML = props;
+  else if (props) for (const k in props) {
+    if (k === 'class') e.className = props[k];
+    else if (k === 'html') e.innerHTML = props[k];
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), props[k]);
+    else e.setAttribute(k, props[k]);
+  }
+  for (const k of kids) if (k) e.append(k);
+  return e;
+}
+const rnd = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const num = v => (Math.abs(v - Math.round(v)) < 1e-9 ? String(Math.round(v)) : v.toFixed(1).replace('.', ','));
+const cm = v => num(v) + '&nbsp;cm';
+const f1 = v => v.toFixed(1).replace('.', ',');
+
+/* ---------- Glossar (Deutsch -> Englisch als Hilfe) ---------- */
+const GLOSS = {
+  'Dezimalzahlen': 'decimal numbers', 'Dezimalzahl': 'decimal number', 'Nachkommastellen': 'decimal places', 'Nachkommastelle': 'decimal place', 'Komma': 'decimal point (comma)',
+  'Übertrag': 'carry', 'untereinander': 'one below the other', 'Überschlag': 'estimate', 'Faktoren': 'factors', 'Produkt': 'product', 'Quotient': 'quotient', 'Teilprodukt': 'partial product', 'Teilprodukte': 'partial products',
+  'Zehnerpotenz': 'power of ten', 'Zehnerpotenzen': 'powers of ten', 'Vorzeichen': 'sign (+ or −)', 'periodische': 'recurring', 'periodisch': 'recurring', 'abbrechende': 'terminating', 'abbrechend': 'terminating', 'Periode': 'repeating digits',
+  'Klammer': 'bracket', 'Minusklammer': 'bracket with a minus in front', 'vertauschen': 'swap', 'Ausklammern': 'factorising', 'Ausmultiplizieren': 'expanding', 'Punkt vor Strich': 'multiply/divide before add/subtract',
+  'Arbeitsheft': 'workbook', 'Heft': 'exercise book', 'ordentlich': 'neatly', 'Merksatz': 'rule to remember', 'Probe': 'check (inverse calculation)', 'auffüllen': 'fill up', 'Bruch': 'fraction', 'Zähler': 'numerator', 'Nenner': 'denominator'
+};
+const GLRE = new RegExp('(^|[^A-Za-zÄÖÜäöüß])(' + Object.keys(GLOSS).sort((a, b) => b.length - a.length).join('|') + ')(?![A-Za-zÄÖÜäöüß])', 'g');
+/* T(): markiert Fachwörter im Text. Antippen zeigt die englische Bedeutung. */
+function T(html) {
+  return String(html).split(/(<[^>]+>)/).map(p => p.startsWith('<') ? p : p.replace(GLRE, (m, pre, w) => `${pre}<span class="gl" data-en="${GLOSS[w]}">${w}</span>`)).join('');
+}
+document.addEventListener('click', e => {
+  const pop = $('#pop'), g = e.target.closest && e.target.closest('.gl');
+  if (!g) { pop.style.display = 'none'; return; }
+  pop.textContent = '🇬🇧 ' + g.dataset.en; pop.style.display = 'block';
+  const r = g.getBoundingClientRect();
+  pop.style.left = Math.max(8, Math.min(window.innerWidth - pop.offsetWidth - 8, r.left)) + 'px';
+  pop.style.top = (r.bottom + 6) + 'px';
+});
+window.addEventListener('scroll', () => { $('#pop').style.display = 'none'; }, true);
+function speak(text) {
+  try { const u = new SpeechSynthesisUtterance(text); u.lang = 'de-DE'; u.rate = .85; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) { }
+}
+
+/* ---------- Zustand, Speichern, Google Sheet ---------- */
+let ST = null;               // {user:{u,pin,name,klasse}, stars:{}, err:0, errs:{}, sec:0, fotos:{}}
+let CUR = null;              // aktuelle Aufgabe (für die Fehlerzählung pro Aufgabe)
+const LS = 'k6_dezimal_v1';
+const userKey = u => LS + ':' + String(u.u).toLowerCase();
+function totalStars() { return Object.keys(ST.stars).length; }
+function maxStars() { return STATIONS.reduce((s, x) => s + x.tasks.reduce((t, y) => t + (y.stars || 1), 0), 0); }
+function stationStars(st) { return st.tasks.reduce((s, t) => s + starsOf(t), 0); }
+function starsOf(t) { const n = t.stars || 1; let c = 0; for (let i = 1; i <= n; i++) if (ST.stars[n === 1 ? t.id : t.id + '.' + i]) c++; return c; }
+function saveLocal() {
+  try { localStorage.setItem(userKey(ST.user), JSON.stringify(ST)); localStorage.setItem(LS + ':last', JSON.stringify(ST.user)); } catch (e) { }
+}
+let dirty = false, syncT = null, syncing = false;
+function save() { saveLocal(); dirty = true; clearTimeout(syncT); syncT = setTimeout(sync, 1500); header(); }
+const taskMax = t => t.stars || 1;
+function summary() {
+  const tasks = {}, fotos = [], extra = {}; let done = 0, n = 0;
+  STATIONS.forEach(st => st.tasks.forEach(t => {
+    const mx = taskMax(t), got = starsOf(t), e = (ST.errs || {})[t.id] || 0;
+    n++; if (got >= mx) done++;
+    tasks[t.id] = [got, mx, e, got, mx, t.id, st.title + ': ' + t.title];
+    if (t.kind === 'learn') t.steps.forEach(s => { if (s.key) fotos.push(s.key); });
+    if (t.kind === 'heft') fotos.push(t.id);
+    if (t.kind === 'test') { const r = (ST.tests || {})[t.id]; extra['v' + t.id] = ['Test ' + st.title + ': Versuche', r ? `${r.n}× · beste ${r.best}/8 · letzte ${r.last}/8` : '–']; }
+  }));
+  extra.heft = ['✏️ Pflicht-Heft-Einträge', fotos.filter(k => k.includes('-H') && ST.fotos[k]).length + ' von ' + fotos.filter(k => k.includes('-H')).length];
+  extra.fotos = ['📷 Fotos gesamt', fotos.filter(k => ST.fotos[k]).length + ' von ' + fotos.length];
+  extra.min = ['Minuten', String(Math.round((ST.sec || 0) / 60))];
+  return { stars: totalStars(), max: maxStars(), err: ST.err || 0, done, n, tasks, extra, fotos };
+}
+function payload() {
+  return { action: 'save', u: ST.user.u, p: ST.user.pin, app: CONFIG.APP_ID, titel: CONFIG.TITEL, link: PAGE_LINK, t: Date.now(),
+    state: { stars: ST.stars, err: ST.err, errs: ST.errs, sec: ST.sec, fotos: ST.fotos, tests: ST.tests }, sum: summary() };
+}
+async function api(data) {
+  const r = await fetch(SERVER_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data), redirect: 'follow' });
+  return await r.json();
+}
+function cloud(state) {
+  const c = $('#cloud'); if (!ST) { c.hidden = true; return; } c.hidden = false;
+  c.textContent = { off: '💾 nur auf diesem Gerät', ok: '☁️ gespeichert', busy: '☁️ speichert …', err: '⚠️ offline – wird später gespeichert' }[state];
+}
+async function sync() {
+  if (!ST || !SERVER_URL) { cloud('off'); return; }
+  if (syncing || !dirty) return;
+  syncing = true; dirty = false; cloud('busy');
+  try { const r = await api(payload()); if (r && r.ok) cloud('ok'); else throw new Error(r && r.err); }
+  catch (e) { dirty = true; cloud('err'); }
+  syncing = false;
+  if (dirty) { clearTimeout(syncT); syncT = setTimeout(sync, 20000); }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && ST) {
+    saveLocal();
+    if (SERVER_URL && dirty) try { if (navigator.sendBeacon(SERVER_URL, new Blob([JSON.stringify(payload())], { type: 'text/plain;charset=utf-8' }))) dirty = false; } catch (e) { }
+  }
+});
+setInterval(() => { if (ST && document.visibilityState === 'visible') { ST.sec = (ST.sec || 0) + 10; if (ST.sec % 60 === 0) { saveLocal(); dirty = true; if (ST.sec % 300 === 0) sync(); } } }, 10000);
+
+function miss() { if (ST) { ST.err = (ST.err || 0) + 1; if (CUR) { ST.errs = ST.errs || {}; ST.errs[CUR] = (ST.errs[CUR] || 0) + 1; } saveLocal(); dirty = true; } }
+function award(id) {
+  if (ST.stars[id]) return false;
+  ST.stars[id] = 1; save();
+  const t = $('#toast'); t.textContent = '⭐ +1 Stern!'; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+  return true;
+}
+function header() {
+  const on = !!ST;
+  for (const id of ['who', 'starcount', 'logout', 'cloud']) $('#' + id).hidden = !on;
+  if (on) { $('#who').textContent = ST.user.name + (ST.user.klasse ? ' · ' + ST.user.klasse : ''); $('#starcount').textContent = '⭐ ' + totalStars() + ' / ' + maxStars(); if (!SERVER_URL) cloud('off'); }
+}
+
+/* ---------- Anmeldung ---------- */
+function showLogin(msg) {
+  ST = null; CUR = null; header();
+  const main = $('#main'); main.innerHTML = '';
+  let last = null; try { last = JSON.parse(localStorage.getItem(LS + ':last')); } catch (e) { }
+  const name = el('input', { id: 'ln', placeholder: SERVER_URL ? 'z. B. 7a-03' : 'dein Name', autocomplete: 'off', autocapitalize: 'off', autocorrect: 'off', spellcheck: 'false' });
+  const pin = el('input', { id: 'lp', placeholder: '4 Ziffern', inputmode: 'numeric', maxlength: '8', autocomplete: 'off' });
+  name.value = QS.get('u') || (last ? last.u : '');
+  const fb = el('div', { class: 'fb' + (msg ? ' err' : ''), html: msg || '' });
+  const go = el('button', { class: 'btn', html: 'Los geht’s! →' });
+  const card = el('div', { class: 'card login' },
+    el('h1', '🔢 Rechnen mit Dezimalzahlen'),
+    el('p', 'Hier lernst und übst du das <b>Rechnen mit Dezimalzahlen</b>: Addieren, Subtrahieren, Multiplizieren und Dividieren. In jedem Kapitel: erst <b>📖 lernen</b>, dann <b>✏️ üben</b>, dann ein <b>kleiner Test</b>. Du sammelst Sterne ⭐.<br><span class="en">Learn and practise calculating with decimals. Learn first, then practise, then a short test.</span>'),
+    el('label', SERVER_URL ? 'Benutzername <span class="en">(username – see your card)</span>' : 'Name <span class="en">(your name)</span>'), name,
+    el('label', 'PIN <span class="en">(' + (SERVER_URL ? 'see your card' : 'choose 4 digits and remember them') + ')</span>'), pin,
+    el('div', { style: 'height:.9rem' }), fb, el('div', { style: 'height:.6rem' }), go,
+    el('p', { class: 'mut', style: 'font-size:.9rem;margin-bottom:0', html: 'Tipp: Unterstrichene Wörter kannst du antippen. Dann siehst du das Wort auf Englisch. 🇬🇧' + (SERVER_URL ? '' : '<br>Hinweis: Diese Seite ist nicht mit dem Server verbunden. Deine Sterne bleiben nur auf diesem Gerät.') }));
+  main.append(card);
+  const bad = h => { ST = null; go.disabled = false; fb.className = 'fb err'; fb.innerHTML = h; };
+  async function submit() {
+    const u = { u: name.value.trim().toLowerCase().replace(/\s+/g, SERVER_URL ? '' : ' '), pin: pin.value.trim(), name: name.value.trim(), klasse: '' };
+    if (u.u.length < 2) return bad(SERVER_URL ? 'Bitte schreibe deinen Benutzernamen.' : 'Bitte schreibe deinen Namen.');
+    if (!/^\d{3,8}$/.test(u.pin)) return bad('Bitte schreibe deine PIN (nur Ziffern).');
+    let local = null; try { local = JSON.parse(localStorage.getItem(userKey(u))); } catch (e) { }
+    if (!SERVER_URL && local && local.user && local.user.pin !== u.pin) return bad('Die PIN ist falsch.');
+    ST = { user: u, stars: {}, err: 0, errs: {}, sec: 0, fotos: {}, tests: {} };
+    if (local && local.user && local.user.pin === u.pin) { Object.assign(ST, local); ST.user = Object.assign({}, local.user, { pin: u.pin }); ST.fotos = ST.fotos || {}; ST.tests = ST.tests || {}; }
+    if (SERVER_URL) {
+      go.disabled = true; fb.className = 'fb info'; fb.innerHTML = 'Einen Moment … ☁️';
+      let r = null;
+      try { r = await api({ action: 'login', u: u.u, p: u.pin, app: CONFIG.APP_ID, titel: CONFIG.TITEL, link: PAGE_LINK }); } catch (e) { r = null; }
+      if (r && r.ok === false) {
+        return bad({ login: 'Benutzername oder PIN ist falsch. <span class="en">(Wrong username or PIN.)</span>', gesperrt: 'Zu viele falsche Versuche. Warte 10 Minuten und frage deine Lehrkraft.', klasse: 'Diese Seite ist für deine Klasse noch nicht freigeschaltet. Frage deine Lehrkraft.' }[r.err] || 'Der Server meldet einen Fehler. Versuche es noch einmal.');
+      }
+      if (r && r.ok) {
+        ST.user.name = r.voll || r.name || u.u; ST.user.klasse = r.klasse || '';
+        const d = r.data && r.data.state;
+        if (d) { Object.assign(ST.stars, d.stars || {}); ST.err = Math.max(ST.err || 0, d.err || 0); ST.sec = Math.max(ST.sec || 0, d.sec || 0); ST.tests = ST.tests || {}; for (const k in (d.tests || {})) { const a = ST.tests[k], b = d.tests[k]; if (!a || b.n > a.n) ST.tests[k] = b; } for (const k in (d.errs || {})) ST.errs[k] = Math.max(ST.errs[k] || 0, d.errs[k]); for (const k in (d.fotos || {})) if (!ST.fotos[k] || (d.fotos[k].t || 0) > (ST.fotos[k].t || 0)) ST.fotos[k] = d.fotos[k]; }
+        cloud('ok');
+      } else {
+        // Server nicht erreichbar: nur weiter, wenn dieses Gerät den Zugang schon kennt
+        if (!(local && local.user && local.user.pin === u.pin)) return bad('Keine Verbindung zum Server. Prüfe das Internet und versuche es noch einmal.');
+        cloud('err');
+      }
+      dirty = true;
+    }
+    saveLocal(); header(); showHome(); if (SERVER_URL) { sync(); retryFotos(); }
+  }
+  go.addEventListener('click', submit);
+  pin.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+}
+
+/* ---------- Übersicht ---------- */
+function starRow(n, of) { let s = ''; for (let i = 0; i < of; i++) s += `<span class="${i < n ? '' : 'off'}">⭐</span>`; return `<span class="stars">${s}</span>`; }
+function showHome() {
+  CUR = null;
+  window.scrollTo(0, 0);
+  const main = $('#main'); main.innerHTML = '';
+  const tot = totalStars(), mx = maxStars();
+  const hero = el('div', { class: 'card hero' },
+    el('div', `<div class="big">⭐ ${tot} / ${mx}</div><div class="mut">Sterne von ${ST.user.name}</div>`),
+    el('div', { style: 'flex:1;min-width:220px' }, el('div', tot >= mx ? '<b>Alle Sterne – unglaublich! 🏆</b>' : tot >= .8 * mx ? '<b>Über 80 % – super! Das ist dein Ziel. 🎉</b> Alles darüber ist ein Bonus.' : tot === 0 ? '<b>Willkommen!</b> Wähle ein Kapitel. Du kannst frei wählen.' : '<b>Weiter so!</b> Wähle ein Kapitel.'), el('div', { class: 'bar goal', html: `<i style="width:${100 * tot / mx}%"></i><b style="left:80%" title="Ziel: 80 %"></b>` }), el('div', { class: 'mut', style: 'font-size:.9rem;margin-top:.3rem', html: `🎯 Ziel: <b>80 %</b> = ${Math.ceil(.8 * mx)} Sterne` })));
+  main.append(el('div', { class: 'card legend', html: T('<b>So funktioniert es:</b> Jedes Kapitel hat <b>📖 Lernen</b> (mit Pflicht-Einträgen ✏️ ins Arbeitsheft), <b>Übungen</b> und einen <b>kleinen Test</b>. Den Test kannst du so oft wiederholen, wie du willst.<br><b>Schwierigkeit:</b> 🟢 leicht · 🟡 mittel · 🔴 schwer. <b>Die schweren Aufgaben sind wirklich schwer. Es ist völlig in Ordnung, wenn du sie nicht schaffst!</b> Niemand muss 100 % erreichen – <b>80 % der Sterne sind ein super Ergebnis.</b>') }));
+  main.append(hero);
+  const grid = el('div', { class: 'grid' });
+  STATIONS.forEach((st, i) => {
+    const n = stationStars(st), of = st.tasks.reduce((t, y) => t + (y.stars || 1), 0);
+    const must = st.tasks.filter(t => t.kind === 'learn').flatMap(t => t.steps.filter(s => s.key && !ST.fotos[s.key] && !pendGet()[s.key])).length;
+    grid.append(el('div', { class: 'card st', onclick: () => showStation(st.id) },
+      el('div', { class: 'ico', html: st.icon }),
+      el('div', { style: 'flex:1' }, el('h3', `Kapitel ${i + 1}: ${st.title}`), el('div', { class: 'mut', html: st.sub }), el('div', { class: 'mut', style: 'font-size:.95rem', html: `⭐ ${n} / ${of}` + (must ? ` · <span style="color:var(--err)">✏️ ${must} Heft-Eintrag${must > 1 ? 'e' : ''} fehlt</span>` : ' · ✏️ ✅') }))));
+  });
+  main.append(grid);
+  const weak = STATIONS.flatMap(s => s.tasks.map(t => ({ s, t, e: (ST.errs || {})[t.id] || 0 }))).filter(x => x.e > 0 && starsOf(x.t) < (x.t.stars || 1)).sort((a, b) => b.e - a.e).slice(0, 3);
+  if (weak.length) main.append(el('div', { class: 'card weak' }, el('h3', '🎯 Hier übst du am besten noch einmal'), el('div', { class: 'mut', html: 'Hier hattest du die meisten Fehler. Aus Fehlern lernt man – versuche es noch einmal!' }),
+    ...weak.map(x => el('button', { class: 'opt', html: `${x.s.icon} <b>${x.t.title}</b> <span class="mut">(${x.s.title})</span> – <span style="color:var(--err)">❌ ${x.e} Fehler</span> · ${starRow(starsOf(x.t), x.t.stars || 1)}`, onclick: () => runTask(x.s.id, x.t.id) }))));
+  main.append(el('p', { class: 'mut', style: 'margin-top:1.2rem', html: SERVER_URL ? 'Deine Sterne, Fehler, Tests und Fotos werden automatisch gespeichert. Deine Lehrkraft kann sie sehen.' : 'Deine Sterne werden auf diesem Gerät gespeichert.' }));
+}
+const LVL = { 1: '<span class="lvl">🟢 leicht</span>', 2: '<span class="lvl">🟡 mittel</span>', 3: '<span class="lvl hard">🔴 schwer</span>' };
+function taskStatus(t) {
+  if (t.kind === 'learn') { const ks = t.steps.filter(s => s.key), ok = ks.filter(s => ST.fotos[s.key]).length; return `<div style="font-size:.9rem;${ok < ks.length ? 'color:var(--err)' : 'color:var(--ok)'}">✏️ Pflicht-Heft-Einträge: ${ok} / ${ks.length} ${ok < ks.length ? '– bitte noch erledigen!' : '✅'}</div>`; }
+  if (t.kind === 'test') { const r = (ST.tests || {})[t.id]; return `<div class="mut" style="font-size:.9rem">${r ? `🔁 ${r.n}× gemacht · Bestwert ${r.best}/8 · zuletzt ${r.last}/8` : 'Noch nicht gemacht'}</div>`; }
+  const e = (ST.errs || {})[t.id] || 0, f = t.foto ? `📷 Foto ${ST.fotos[t.id] ? '✅' : pendGet()[t.id] ? '⏳' : '– fehlt'} · ` : '';
+  return `<div style="font-size:.88rem">${f}${e ? `<span style="color:var(--err)">❌ ${e} Fehler bisher</span>` : ''}</div>`;
+}
+function showStation(sid) {
+  CUR = null;
+  window.scrollTo(0, 0);
+  const st = STATIONS.find(s => s.id === sid), main = $('#main'); main.innerHTML = '';
+  main.append(el('div', { class: 'crumb' }, el('button', { class: 'btn sec small', html: '← Übersicht', onclick: showHome }), el('h2', `${st.icon} ${st.title}`)));
+  main.append(el('div', { class: 'card', style: 'margin-bottom:.9rem', html: T('Du kannst jede Aufgabe direkt wählen. Empfehlung: <b>📖 Lernen → Üben → Test</b>. 🔴 Schwere Aufgaben sind wirklich schwer – es ist okay, wenn sie nicht klappen.') }));
+  const list = el('div', { class: 'tasklist' });
+  st.tasks.forEach((t, i) => {
+    const of = t.stars || 1, n = starsOf(t), ic = t.kind === 'learn' ? '📖' : t.kind === 'test' ? '🏁' : t.kind === 'heft' ? '📷' : String(i);
+    list.append(el('div', { class: 'card task' + (n >= of ? ' done' : '') + (t.kind ? ' k-' + t.kind : ''), onclick: () => runTask(sid, t.id) },
+      el('div', { class: 'n', html: ic }), el('div', `<b>${t.title}</b> ${t.lvl ? LVL[t.lvl] : ''}<div class="mut">${t.sub || ''}</div>` + taskStatus(t)),
+      el('div', { class: 'go', html: (of > 4 ? `⭐ ${n}/${of}` : starRow(n, of)) + ' ▸' })));
+  });
+  main.append(list);
+}
+function runTask(sid, tid) {
+  window.scrollTo(0, 0);
+  const st = STATIONS.find(s => s.id === sid), idx = st.tasks.findIndex(t => t.id === tid), t = st.tasks[idx], main = $('#main');
+  CUR = t.id;
+  main.innerHTML = '';
+  main.append(el('div', { class: 'crumb' }, el('button', { class: 'btn sec small', html: '← ' + st.title, onclick: () => showStation(sid) }), el('h2', t.title)));
+  const host = el('div'); main.append(host);
+  let finished = false;
+  function done(msg, starId) {
+    if (finished) return; finished = true;
+    const isNew = award(starId || t.id);
+    const nx = st.tasks[idx + 1];
+    const box = el('div', { class: 'card donebox' },
+      el('h3', (isNew ? '⭐ Geschafft! Du hast einen Stern bekommen.' : '✅ Geschafft!')),
+      msg ? el('div', { html: T(msg), style: 'margin-bottom:.7rem' }) : null,
+      el('div', { class: 'row' },
+        nx ? el('button', { class: 'btn', html: 'Nächste Aufgabe →', onclick: () => runTask(sid, nx.id) }) : el('button', { class: 'btn', html: 'Zur Übersicht →', onclick: showHome }),
+        el('button', { class: 'btn sec', html: '↻ Noch einmal üben', onclick: () => runTask(sid, tid) }),
+        el('button', { class: 'btn sec', html: '← ' + st.title, onclick: () => showStation(sid) })));
+    main.append(box); box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  if (t.lvl === 3) host.append(el('div', { class: 'hardnote', html: '🔴 <b>Schwere Aufgabe.</b> Gib dein Bestes – es ist völlig okay, wenn du nicht alles schaffst!' }));
+  t.run(host, done);
+}
+
+function compress(file, max = 1600, q = .72) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas');
+      c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', q));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('bild')); };
+    img.src = url;
+  });
+}
+const pendKey = () => LS + ':fotos:' + String(ST.user.u).toLowerCase();
+function pendGet() { try { return JSON.parse(localStorage.getItem(pendKey())) || {}; } catch (e) { return {}; } }
+function pendSet(m) { try { if (Object.keys(m).length) localStorage.setItem(pendKey(), JSON.stringify(m)); else localStorage.removeItem(pendKey()); return true; } catch (e) { return false; } }
+let fotoBusy = false;
+async function sendFoto(key, data) {
+  if (!SERVER_URL) { ST.fotos[key] = { t: Date.now(), lokal: 1 }; save(); return 'local'; }
+  let r = null;
+  try { r = await api({ action: 'photo', u: ST.user.u, p: ST.user.pin, app: CONFIG.APP_ID, titel: CONFIG.TITEL, link: PAGE_LINK, key, data, sum: summary() }); } catch (e) { r = null; }
+  const m = pendGet();
+  if (r && r.ok) { ST.fotos[key] = { id: r.id, t: Date.now() }; delete m[key]; pendSet(m); save(); return 'ok'; }
+  if (r && r.ok === false) return 'Der Server hat das Foto nicht angenommen (' + (r.err || 'Fehler') + '). Frage deine Lehrkraft.';
+  m[key] = data; return pendSet(m) ? 'later' : 'Kein Internet – und auf dem Gerät ist kein Platz für das Foto. Versuche es später noch einmal.';
+}
+async function retryFotos() {
+  if (!ST || !SERVER_URL || fotoBusy) return; const m = pendGet(), ks = Object.keys(m); if (!ks.length) return;
+  fotoBusy = true;
+  try { for (const k of ks) { if (await sendFoto(k, m[k]) === 'ok') award(fotoStar(k)); else break; } } finally { fotoBusy = false; }
+}
+setInterval(retryFotos, 30000);
+window.addEventListener('online', retryFotos);
+
+
+
+const PRAISE = ['Super!', 'Klasse!', 'Stark!', 'Genau!', 'Prima!', 'Toll!', 'Sehr gut!', 'Perfekt!'];
+
+/* =====================================================================
+   ÜBUNGSRUNDE: Aufgaben nacheinander, Fehler werden markiert und gezählt.
+   0 Fehler = ⭐⭐⭐ · 1–2 Fehler = ⭐⭐ · mehr Fehler = ⭐
+   ===================================================================== */
+function awardN(id, k) {
+  let n = 0; for (let i = 1; i <= k; i++) if (!ST.stars[id + '.' + i]) { ST.stars[id + '.' + i] = 1; n++; }
+  if (n) { save(); const t = $('#toast'); t.textContent = '⭐ +' + n + (n > 1 ? ' Sterne!' : ' Stern!'); t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+  return n;
+}
+function taskNav(t) {
+  const st = STATIONS.find(s => s.tasks.includes(t)), i = st.tasks.indexOf(t), nx = st.tasks[i + 1];
+  return el('div', { class: 'row', style: 'justify-content:center' },
+    el('button', { class: 'btn sec', html: '↻ Noch einmal', onclick: () => runTask(st.id, t.id) }),
+    nx ? el('button', { class: 'btn', html: 'Nächste Aufgabe →', onclick: () => runTask(st.id, nx.id) }) : el('button', { class: 'btn', html: 'Zur Übersicht →', onclick: showHome }),
+    el('button', { class: 'btn sec', html: '← ' + st.title, onclick: () => showStation(st.id) }));
+}
+function runRound(host, t, cfg) {
+  const exam = !!cfg.exam;
+  let queue = []; for (let i = 0; i < cfg.n; i++) queue.push(cfg.make(i));
+  let errs = 0, streak = 0, results = [];
+  const bar = el('div', { class: 'bar' }, el('i')), pills = el('div', { class: 'row', style: 'gap:.4rem' });
+  const hudBox = el('div', { class: 'hud' }, el('div', { style: 'flex:1;min-width:160px' }, el('div', { class: 'prog' }), bar), pills);
+  const stage = el('div');
+  if (cfg.intro) host.append(el('div', { class: 'card', style: 'margin-bottom:.7rem', html: T(cfg.intro) }));
+  host.append(hudBox, stage);
+  function hud() {
+    const done = results.length, all = done + queue.length + (cur && !cur.over ? 1 : 0);
+    hudBox.querySelector('.prog').innerHTML = `Aufgabe ${Math.min(done + 1, all)} von ${all}` + (exam ? '' : ` <span class="dotsrow">${results.map(r => `<i class="${r.ok ? 'g' : 'r'}"></i>`).join('')}</span>`);
+    bar.firstChild.style.width = (100 * done / Math.max(1, all)) + '%';
+    pills.innerHTML = (exam ? `<span class="pill2">✅ ${results.filter(r => r.ok).length}</span>` : '') + `<span class="pill2 ${errs ? 'bad' : ''}">❌ ${errs} Fehler</span>` + (streak >= 3 ? `<span class="pill2 fire">🔥 ${streak} richtig hintereinander</span>` : '');
+  }
+  let cur = null;
+  function next() {
+    if (!queue.length) return finish();
+    const it = queue.shift(); cur = it; it.over = false; stage.innerHTML = '';
+    let itemErr = 0;
+    const fb = el('div', { class: 'fb' }), nav = el('div', { class: 'row' }); let mounted = false;
+    const box = el('div', { class: 'card item' }); stage.append(box);
+    const R = {
+      exam, tries: () => itemErr,
+      mount(panel) { panel.append(fb, nav); mounted = true; },
+      wrong(h, final) {
+        if (it.over) return; itemErr++; errs++; streak = 0; miss();
+        fb.className = 'fb err'; fb.innerHTML = T('❌ ' + h); hud();
+        if (final || (exam && final !== false)) end(false);
+      },
+      right(h) { if (it.over) return; fb.className = 'fb ok'; fb.innerHTML = T('✅ ' + (itemErr ? 'Jetzt stimmt es. ' : pick(PRAISE) + ' ') + (h || '')); end(itemErr === 0); },
+      info(h) { if (!it.over) { fb.className = 'fb info'; fb.innerHTML = T(h); } }
+    };
+    function end(ok) {
+      it.over = true; if (ok) streak++;
+      results.push({ it, ok });
+      if (!ok && !exam && !it.requeued) { const c = it.again ? it.again() : it; c.requeued = true; queue.push(c); fb.innerHTML += '<div class="again">↻ Diese Art von Aufgabe kommt am Ende noch einmal.</div>'; }
+      if (exam && !ok && it.sol) fb.innerHTML += '<div style="font-weight:500;margin-top:.3rem">' + T(it.sol) + '</div>';
+      hud();
+      const w = el('button', { class: 'btn', html: queue.length ? 'Weiter →' : 'Ergebnis ansehen →', onclick: next });
+      nav.innerHTML = ''; nav.append(w); w.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    it.show(box, R);
+    if (!mounted) box.append(fb, nav);
+    hud(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function finish() {
+    stage.innerHTML = ''; hudBox.remove();
+    const ok = results.filter(r => r.ok).length;
+    let k, title, msg;
+    if (exam) {
+      const th = cfg.th || [11, 9, 7]; k = ok >= th[0] ? 3 : ok >= th[1] ? 2 : ok >= th[2] ? 1 : 0; testRecord(t.id, ok, results.length);
+      title = ok >= th[0] ? '🏆 Super – Test bestanden!' : ok >= th[1] ? '👍 Gut gemacht!' : ok >= th[2] ? '🙂 Schon ganz gut!' : '💪 Übe noch ein bisschen – dann versuche es noch einmal!';
+      msg = `<span class="big">${ok} von ${results.length}</span> Aufgaben richtig.`;
+    } else {
+      k = errs === 0 ? 3 : errs <= 2 ? 2 : 1;
+      title = errs === 0 ? '🏆 Fehlerfrei! Perfekt!' : errs <= 2 ? '👍 Gut gemacht!' : '💪 Geschafft!';
+      msg = `<span class="big">${errs === 0 ? 'Kein Fehler' : errs + (errs === 1 ? ' Fehler' : ' Fehler')}</span>`;
+    }
+    const isNew = k ? awardN(t.id, k) : 0, have = starsOf(t);
+    const card = el('div', { class: 'card cert' },
+      el('h2', title), el('p', { html: msg }), el('div', { class: 'bigstars', html: starRow(k, 3) }),
+      el('p', { class: 'mut', html: exam ? `${(cfg.th || [11, 9, 7])[2]} richtig = ⭐ · ${(cfg.th || [11, 9, 7])[1]} richtig = ⭐⭐ · ${(cfg.th || [11, 9, 7])[0]} richtig = ⭐⭐⭐<br>🔁 Das war dein ${ST.tests[t.id].n}. Versuch. Bestwert: ${ST.tests[t.id].best} von ${results.length}.` : '0 Fehler = ⭐⭐⭐ · 1–2 Fehler = ⭐⭐ · mehr Fehler = ⭐' }),
+      el('p', { html: have < 3 ? `<b>Schaffst du es ${exam ? 'noch besser' : 'ohne Fehler'}? Dann bekommst du ${3 - have === 1 ? 'den letzten Stern' : 'mehr Sterne'}!</b>` : (isNew ? '<b>Neue Sterne! 🎉</b>' : 'Du hast hier schon alle 3 Sterne. 🌟') }));
+
+    const wrong = results.filter(r => !r.ok);
+    if (exam && wrong.length) {
+      const names = [...new Set(wrong.map(r => r.it.st).filter(Boolean))];
+      card.append(el('div', { class: 'box', style: 'text-align:left', html: '<b>Das übst du noch einmal:</b><ul>' + names.map(n => `<li>${n}</li>`).join('') + '</ul>' }));
+    }
+    card.append(taskNav(t));
+    stage.append(card); save(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  next();
+}
+
+/* ---------- Bausteine für Aufgaben ---------- */
+function twoCol(box) { const l = el('div'), r = el('div', { class: 'panel' }); box.append(el('div', { class: 'two' }, l, r)); return [l, r]; }
+/* Auswahl: opts = [{t, ok}] ; expl = Erklärung (für richtig und falsch) */
+function choose(panel, q, opts, R, o = {}) {
+  panel.append(el('div', { class: 'q', html: T(q) }));
+  const list = el('div', { class: 'opts' + (o.row ? ' rowopts' : '') }); let lock = false;
+  (o.keep ? opts : shuffle(opts)).forEach(op => {
+    const b = el('button', { class: 'opt', html: op.t }); list.append(b);
+    b.addEventListener('click', () => {
+      if (lock) return; lock = true;
+      if (op.ok) { b.classList.add('right'); o.after && o.after(true); R.right(o.expl || ''); }
+      else { b.classList.add('wrong'); [...list.children].forEach(x => { if (x._ok) x.classList.add('right'); }); o.after && o.after(false); R.wrong((op.why ? op.why + ' ' : '') + (o.expl || 'Die richtige Antwort ist grün.'), true); }
+    });
+    b._ok = !!op.ok;
+  });
+  panel.append(list); return list;
+}
+const WF = (q, yes, R, panel, expl, after) => choose(panel, q, [{ t: '✔ wahr', ok: yes }, { t: '✘ falsch', ok: !yes }], R, { keep: true, row: true, expl, after });
+/* Auf einen Gitterpunkt tippen. ok(p) prüft; hint(p) gibt Tipp; after 2 Fehlern wird die Lösung gezeigt. */
+
+
+/* =====================================================================
+   ZAHLEN-HELFER (Dezimalzahlen ohne Rundungsfehler)
+   ===================================================================== */
+const findTask = id => STATIONS.flatMap(s => s.tasks).find(t => t.id === id);
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const R9 = x => Math.round(x * 1e9) / 1e9;
+const fmt = x => { x = R9(x); let s = Math.abs(x).toFixed(9).replace(/0+$/, '').replace(/\.$/, ''); return (x < 0 ? '−' : '') + s.replace('.', ','); };
+const dp = x => { const s = Math.abs(R9(x)).toFixed(9).replace(/0+$/, ''); const i = s.indexOf('.'); return i < 0 || i === s.length - 1 ? 0 : s.length - i - 1; };
+/* Zufallszahl mit genau k Nachkommastellen (letzte Stelle ≠ 0) zwischen lo und hi */
+function dec(k, lo, hi) { const f = 10 ** k; for (let n = 0; n < 200; n++) { const v = rint(Math.ceil(lo * f), Math.floor(hi * f)); if (k === 0 || v % 10) return v / f; } return lo; }
+const P = x => x < 0 ? `(${fmt(x)})` : fmt(x);          // negative Zahlen in Klammern
+function parseDE(s) {
+  s = String(s).trim().replace(/\s+/g, '').replace(/[−–]/g, '-').replace(',', '.');
+  if (!/^-?\d*\.?\d+$/.test(s) && !/^-?\d+\.?$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+const same = (a, b) => Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(b));
+const SUP = { '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶' };
+
+/* =====================================================================
+   SCHRIFTLICHE RECHNUNG IM KAROGITTER
+   Jede Zeile ist ein Text: jedes Zeichen = ein Kästchen, ein Komma hängt am Kästchen davor.
+   Zeilen-Optionen: {t, u (Strich darunter), c (Klasse: carry, res, bad, ok)}
+   ===================================================================== */
+function kgrid(lines, o = {}) {
+  const rows = lines.map(l => typeof l === 'string' ? { t: l } : l).map(l => {
+    const cells = []; for (const ch of l.t) { if (ch === ',' && cells.length) cells[cells.length - 1].cm = true; else cells.push({ c: ch === ' ' ? '' : ch }); }
+    return Object.assign({}, l, { cells });
+  });
+  const W = Math.max(...rows.map(r => r.cells.length)) + 1;
+  let h = `<table class="kg${o.cls ? ' ' + o.cls : ''}">`;
+  rows.forEach(r => {
+    h += `<tr class="${r.c || ''}${r.u ? ' u' : ''}">`;
+    for (let i = 0; i < W; i++) { const c = r.cells[i]; h += `<td>${c ? `<span class="${/[A-Za-z]/.test(c.c) ? 'lab' : ''}">${c.c}</span>${c.cm ? '<i class="cm">,</i>' : ''}` : ''}</td>`; }
+    h += '</tr>';
+  });
+  return h + '</table>';
+}
+const digits = s => s.replace(/[^0-9]/g, '').length;
+const intLen = s => s.replace('−', '').split(',')[0].length;
+const decLen = s => (s.split(',')[1] || '').length;
+/* Addition / Subtraktion untereinander (Komma unter Komma) */
+function addLines(a, b, op, res, o = {}) {
+  const A = fmt(Math.abs(a)), B = fmt(Math.abs(b)), Rr = fmt(Math.abs(res));
+  const ci = Math.max(intLen(A), intLen(B), intLen(Rr)), cd = Math.max(decLen(A), decLen(B), decLen(Rr));
+  const pad = (s, fill) => ' '.repeat(ci - intLen(s)) + s.split(',')[0] + (cd ? ',' + (s.split(',')[1] || '') + (fill ? '0' : ' ').repeat(cd - decLen(s)) : '');
+  if (o.right) {   // Fehler: rechtsbündig statt Komma unter Komma
+    const W = Math.max(digits(A), digits(B), digits(o.shown || Rr));
+    const rp = s => ' '.repeat(W - digits(s)) + s;
+    return [{ t: ' ' + rp(A) }, { t: op + rp(B), u: true }, { t: ' ' + rp(o.shown), c: 'res' }];
+  }
+  return [{ t: ' ' + pad(A, o.fill) }, { t: op + pad(B, o.fill), u: true }].concat(o.carry ? [{ t: ' ' + o.carry, c: 'carry' }] : []).concat([{ t: ' ' + pad(o.shown || Rr, o.fill), c: 'res' }]);
+}
+/* Multiplikation: Teilprodukte unter die Ziffern des 2. Faktors */
+function mulLines(a, b, o = {}) {
+  const A = fmt(a), B = fmt(b), top = A + '·' + B, Bd = B.replace(',', '');
+  const An = parseInt(A.replace(',', ''), 10), k = decLen(A) + decLen(B), dA = digits(A), lenTop = dA + 1 + digits(B);
+  const lines = [{ t: top, u: true }];
+  let total = 0, prevEnd = null, started = false;
+  [...Bd].forEach((d, j) => {
+    if (+d === 0 && !started) return;          // führende Nullen (z. B. bei 0,45) braucht man nicht
+    started = true;
+    let end = dA + 1 + j;                      // Teilprodukt endet unter der Ziffer des 2. Faktors
+    if (o.noShift && prevEnd != null) end = prevEnd;
+    const p = String(An * +d);
+    lines.push({ t: ' '.repeat(Math.max(0, end - p.length + 1)) + p });
+    total += An * +d * 10 ** (lenTop - 1 - end);
+    prevEnd = end;
+  });
+  lines[lines.length - 1].u = true;
+  let ts = String(total), kk = o.k != null ? o.k : k;
+  while (ts.length <= kk) ts = '0' + ts;
+  const shown = kk ? ts.slice(0, ts.length - kk) + ',' + ts.slice(ts.length - kk) : ts;
+  lines.push({ t: ' '.repeat(Math.max(0, lenTop - digits(shown))) + shown, c: 'res' });
+  return { lines, value: parseFloat(shown.replace(',', '.')) };
+}
+
+/* =====================================================================
+   AUFGABEN-BAUSTEINE für die Übungsrunden
+   ===================================================================== */
+function signBtn(inp) { return el('button', { class: 'btn sec small pm', html: '±', title: 'Vorzeichen ändern', onclick: () => { const v = inp.value.trim(); inp.value = v.startsWith('−') || v.startsWith('-') ? v.replace(/^[−-]/, '') : '−' + v; inp.focus(); } }); }
+/* Rechenaufgabe mit Zahleneingabe. o = {q, a, st, hint, sol, pre, unit, again} */
+function itNum(o) {
+  return { st: o.st, again: o.again, sol: 'Lösung: ' + (o.solTxt || fmt(o.a)) + (o.unit ? ' ' + o.unit : ''),
+    show(box, R) {
+      const c = el('div', { class: 'narrow' }); box.append(c);
+      if (o.intro) c.append(el('div', { class: 'q', html: T(o.intro) }));
+      if (o.pre) c.append(el('div', { class: 'prebox', html: o.pre }));
+      const inp = el('input', { class: 'inp ans', inputmode: 'decimal', autocomplete: 'off', placeholder: '?' });
+      const go = el('button', { class: 'btn', html: 'Prüfen ✓' });
+      c.append(el('div', { class: 'exprrow' }, el('span', { class: 'expr', html: o.q + (o.noEq ? '' : ' =') }), inp, o.unit ? el('b', o.unit) : null, signBtn(inp), go));
+      let tries = 0, over = false;
+      const check = () => {
+        if (over) return; const v = parseDE(inp.value);
+        if (isNaN(v)) { R.info('Schreibe eine Zahl. Beispiel: 3,75 – für minus tippe auf ±.'); return; }
+        if (same(v, o.a)) { over = true; inp.classList.add('right'); R.right(o.ok || ''); return; }
+        tries++; inp.classList.add('wrong'); setTimeout(() => inp.classList.remove('wrong'), 700);
+        const h = typeof o.hint === 'function' ? o.hint(v) : (o.hint || 'Das stimmt noch nicht.');
+        if (tries >= 2 || R.exam) { over = true; R.wrong(h + '<br><b>Richtig ist: ' + fmt(o.a) + (o.unit ? ' ' + o.unit : '') + '</b>' + (o.sol ? '<div class="solbox">' + o.sol + '</div>' : ''), true); }
+        else R.wrong(h + ' Versuche es noch einmal.', false);
+      };
+      go.addEventListener('click', check); inp.addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+      R.mount(c); setTimeout(() => inp.focus(), 50);
+    } };
+}
+/* Auswahl-Aufgabe */
+function itMC(o) {
+  return { st: o.st, again: o.again, sol: 'Lösung: ' + o.right,
+    show(box, R) {
+      const c = el('div', { class: 'narrow' }); box.append(c);
+      if (o.pre) c.append(el('div', { class: 'prebox', html: o.pre }));
+      choose(c, o.q, [{ t: o.right, ok: true }, ...o.wrong.map(t => ({ t }))], R, { row: o.row !== false, expl: o.expl, keep: o.keep });
+      R.mount(c);
+    } };
+}
+/* Fehler finden: erst „Was ist falsch?“, dann das richtige Ergebnis */
+const ERR = { komma: 'Komma nicht unter Komma', uebertrag: 'Übertrag vergessen', vorz: 'Vorzeichen falsch', nks: 'Komma im Ergebnis falsch gesetzt', shift: 'Teilprodukt nicht eingerückt', ok: 'Alles richtig gerechnet' };
+function itFind(o) {   // o = {pre, type, a, expl, st, again, opts}
+  return { st: o.st, again: o.again, sol: 'Lösung: ' + ERR[o.type] + (o.type === 'ok' ? '' : '. Richtig: ' + fmt(o.a)),
+    show(box, R) {
+      const c = el('div', { class: 'narrow' }); box.append(c);
+      c.append(el('div', { class: 'q', html: T(o.q || '🔍 <b>Finde den Fehler.</b> Was wurde falsch gemacht?') }), el('div', { class: 'prebox', html: o.pre }));
+      const keys = shuffle(o.opts || ['komma', 'uebertrag', 'nks', 'ok']);
+      const list = el('div', { class: 'opts rowopts' }); let lock = false;
+      keys.forEach(k => {
+        const b = el('button', { class: 'opt', html: ERR[k] }); b._ok = k === o.type; list.append(b);
+        b.addEventListener('click', () => {
+          if (lock) return; lock = true;
+          if (k === o.type) { b.classList.add('right'); step2(true); }
+          else { b.classList.add('wrong'); [...list.children].forEach(x => { if (x._ok) x.classList.add('right'); }); step2(false); }
+        });
+      });
+      c.append(list);
+      function step2(ok1) {
+        if (o.type === 'ok') { ok1 ? R.right(o.expl || 'Die Rechnung stimmt.') : R.wrong((o.expl || '') + ' Die Rechnung ist richtig.', true); return; }
+        if (!ok1) { R.wrong(o.expl + '<br>Richtig ist: <b>' + fmt(o.a) + '</b>', true); return; }
+        R.info('✅ Richtig erkannt! ' + o.expl + '<br>Wie lautet das <b>richtige</b> Ergebnis?');
+        const inp = el('input', { class: 'inp ans', inputmode: 'decimal', placeholder: '?' }), go = el('button', { class: 'btn', html: 'Prüfen ✓' });
+        c.insertBefore(el('div', { class: 'exprrow' }, el('span', { class: 'expr', html: 'Richtiges Ergebnis:' }), inp, signBtn(inp), go), c.querySelector('.fb'));
+        let t = 0, over = false;
+        const chk = () => { if (over) return; const v = parseDE(inp.value); if (isNaN(v)) return; if (same(v, o.a)) { over = true; R.right('Richtig korrigiert: ' + fmt(o.a)); } else { t++; if (t >= 2 || R.exam) { over = true; R.wrong('Richtig ist: <b>' + fmt(o.a) + '</b>', true); } else R.wrong('Das richtige Ergebnis ist noch nicht dabei. Rechne noch einmal.', false); } };
+        go.addEventListener('click', chk); inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk(); }); setTimeout(() => inp.focus(), 50);
+      }
+      R.mount(c);
+    } };
+}
+/* Richtig oder falsch? Wenn falsch: richtiges Ergebnis eingeben */
+function itWFfix(o) {   // o = {stmt, ok(boolean), a (richtiger Wert), expl, st, again}
+  return { st: o.st, again: o.again, sol: o.ok ? 'Lösung: richtig.' : 'Lösung: falsch – richtig ist ' + fmt(o.a),
+    show(box, R) {
+      const c = el('div', { class: 'narrow' }); box.append(c);
+      c.append(el('div', { class: 'q', html: '🔍 Hier wurde gerechnet. <b>Stimmt das?</b>' }), el('div', { class: 'stmtbig', html: o.stmt }));
+      const list = el('div', { class: 'opts rowopts' }); let lock = false;
+      [['✔ richtig', true], ['✘ falsch', false]].forEach(([t, v]) => {
+        const b = el('button', { class: 'opt', html: t }); b._ok = v === o.ok; list.append(b);
+        b.addEventListener('click', () => {
+          if (lock) return; lock = true;
+          if (v !== o.ok) { b.classList.add('wrong'); [...list.children].forEach(x => { if (x._ok) x.classList.add('right'); }); R.wrong(o.expl + (o.ok ? '' : '<br>Richtig ist: <b>' + fmt(o.a) + '</b>'), true); return; }
+          b.classList.add('right');
+          if (o.ok) { R.right(o.expl); return; }
+          R.info('✅ Richtig erkannt: Das ist falsch! Wie lautet das richtige Ergebnis?');
+          const inp = el('input', { class: 'inp ans', inputmode: 'decimal', placeholder: '?' }), go = el('button', { class: 'btn', html: 'Prüfen ✓' });
+          c.insertBefore(el('div', { class: 'exprrow' }, el('span', { class: 'expr', html: 'Richtig:' }), inp, signBtn(inp), go), c.querySelector('.fb'));
+          let t = 0, over = false;
+          const chk = () => { if (over) return; const val = parseDE(inp.value); if (isNaN(val)) return; if (same(val, o.a)) { over = true; R.right(o.expl); } else { t++; if (t >= 2 || R.exam) { over = true; R.wrong(o.expl + '<br>Richtig ist: <b>' + fmt(o.a) + '</b>', true); } else R.wrong('Noch nicht. Rechne noch einmal.', false); } };
+          go.addEventListener('click', chk); inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk(); }); setTimeout(() => inp.focus(), 50);
+        });
+      });
+      c.append(list); R.mount(c);
+    } };
+}
+
+/* =====================================================================
+   LERNEN: Lernseiten mit Prüffragen und Pflicht-Heft-Einträgen (Foto)
+   ===================================================================== */
+const HEFTRULES = '<div class="rules">✏️ <b>Schreibe ordentlich!</b> Überschrift mit Lineal unterstreichen · Datum an den Rand · eine Ziffer pro Kästchen · Komma unter Komma · sauber und gut lesbar. <span class="en">Write neatly – your teacher will read it.</span></div>';
+function lessonStars(t) { return t.steps.filter(s => s.type === 'check' || s.type === 'heft').length; }
+function lessonPrep(t) { let k = 0, h = 0; t.steps.forEach(s => { if (s.type === 'check' || s.type === 'heft') s.star = t.id + '.' + (++k); if (s.type === 'heft') s.key = t.id + '-H' + (++h); }); t.stars = k; }
+function runLesson(host, t) {
+  let i = 0;
+  const nav = el('div', { class: 'lnav' }), card = el('div', { class: 'card lcard' }), foot = el('div', { class: 'row', style: 'justify-content:space-between;margin-top:.8rem' });
+  host.append(el('div', { class: 'card', style: 'margin-bottom:.6rem', html: T('📖 <b>Lernen:</b> Lies jede Seite genau. ❓ = Frage (⭐) · ✏️ = <b>Pflicht:</b> ins Arbeitsheft schreiben und fotografieren (⭐). Du kannst oben jede Seite direkt antippen.') }), nav, card, foot);
+  const icon = s => s.type === 'info' ? '📖' : s.type === 'check' ? '❓' : '✏️';
+  function drawNav() {
+    nav.innerHTML = '';
+    t.steps.forEach((s, k) => {
+      const done = s.star && ST.stars[s.star], miss = s.type === 'heft' && !ST.fotos[s.key] && !pendGet()[s.key];
+      nav.append(el('button', { class: 'ldot' + (k === i ? ' on' : '') + (done ? ' done' : '') + (miss ? ' must' : ''), html: icon(s) + '<small>' + (k + 1) + '</small>', title: s.title || '', onclick: () => { i = k; draw(); } }));
+    });
+  }
+  function draw() {
+    const s = t.steps[i]; drawNav(); card.innerHTML = ''; foot.innerHTML = '';
+    if (s.title) card.append(el('h3', { html: icon(s) + ' ' + s.title }));
+    if (s.type === 'info') card.append(el('div', { class: 'ltext', html: T(s.html) }));
+    if (s.type === 'check') drawCheck(s);
+    if (s.type === 'heft') drawHeft(s);
+    foot.append(i > 0 ? el('button', { class: 'btn sec', html: '← Zurück', onclick: () => { i--; draw(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }) : el('span'),
+      i < t.steps.length - 1 ? el('button', { class: 'btn', html: 'Weiter →', onclick: () => { i++; draw(); window.scrollTo({ top: 0, behavior: 'smooth' }); } })
+        : el('button', { class: 'btn', html: 'Fertig ✓ – jetzt üben!', onclick: () => { const st = STATIONS.find(x => x.tasks.includes(t)); const nx = st.tasks[st.tasks.indexOf(t) + 1]; nx ? runTask(st.id, nx.id) : showStation(st.id); } }));
+  }
+  function drawCheck(s) {
+    const have = ST.stars[s.star];
+    if (s.html) card.append(el('div', { class: 'ltext', html: T(s.html) }));
+    const fb = el('div', { class: 'fb' + (have ? ' ok' : ''), html: have ? '✅ Diese Frage hast du schon richtig beantwortet.' : '' });
+    let tries = 0, over = false;
+    const finish = ok => { over = true; if (ok) { award(s.star); fb.className = 'fb ok'; fb.innerHTML = T('✅ ' + pick(PRAISE) + ' ' + (s.expl || '')); drawNav(); } else { fb.className = 'fb err'; fb.innerHTML = T('❌ ' + (s.expl || '') + ' <b>Richtig ist: ' + (s.opts ? s.opts[0] : fmt(s.a)) + '</b><br>Lies die Seite davor noch einmal. Du kannst die Frage später wiederholen.'); } };
+    const bad = msg => { miss(); tries++; if (tries >= 2) finish(false); else { fb.className = 'fb err'; fb.innerHTML = T('❌ ' + (msg || 'Das stimmt noch nicht. Versuche es noch einmal.')); } };
+    if (s.opts) {
+      card.append(el('div', { class: 'q', html: T(s.q) }));
+      const list = el('div', { class: 'opts' });
+      shuffle(s.opts.map((t, k) => ({ t, ok: k === 0 }))).forEach(o => { const b = el('button', { class: 'opt', html: o.t }); b.addEventListener('click', () => { if (over && !have) return; if (o.ok) { b.classList.add('right'); finish(true); } else { b.classList.add('wrong'); bad(s.hint); } }); list.append(b); });
+      card.append(list);
+    } else {
+      const inp = el('input', { class: 'inp ans', inputmode: 'decimal', placeholder: '?' }), go = el('button', { class: 'btn', html: 'Prüfen ✓' });
+      card.append(el('div', { class: 'exprrow' }, el('span', { class: 'expr', html: s.q + ' =' }), inp, s.unit ? el('b', s.unit) : null, signBtn(inp), go));
+      const chk = () => { if (over && !have) return; const v = parseDE(inp.value); if (isNaN(v)) { fb.className = 'fb info'; fb.innerHTML = 'Schreibe eine Zahl.'; return; } if (same(v, s.a)) { inp.classList.add('right'); finish(true); } else bad(s.hint); };
+      go.addEventListener('click', chk); inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk(); });
+    }
+    card.append(fb);
+  }
+  function drawHeft(s) {
+    card.append(el('div', { class: 'pflicht', html: '⚠️ <b>Pflicht-Eintrag ins Arbeitsheft</b> – deine Lehrkraft sieht dein Foto.' }));
+    card.append(el('div', { class: 'ltext', html: T(s.task) }), el('div', { class: 'heftbox', html: s.html }), el('div', { html: HEFTRULES }));
+    const f = el('div'); card.append(f);
+    fotoBlock(f, s.key, s.star, () => drawNav(), s.title);
+  }
+  draw();
+}
+
+/* Heft-Aufgaben mit Foto: erst im Heft rechnen (ordentlich!), Ergebnisse eingeben, Foto senden */
+function runHeftTask(host, t) {
+  const c = t.cfg;
+  host.append(el('div', { class: 'card', style: 'margin-bottom:.7rem', html: T('📷 <b>Diese Aufgaben sind besonders wichtig.</b> Rechne sie <b>schriftlich in deinem Arbeitsheft</b> – genau so, wie du es gelernt hast. Dann gibst du die Ergebnisse ein und fotografierst deine Rechnungen. Später reicht es, nur das Ergebnis einzugeben.') }));
+  const wrap = el('div', { class: 'two' }), L = el('div', { class: 'panel' }), Rr = el('div', { class: 'panel' }); wrap.append(L, Rr); host.append(wrap);
+  L.append(el('div', { class: 'card heftcard' }, el('h3', '✏️ Rechne im Heft'), el('div', { html: T(c.how) }), el('div', { html: HEFTRULES })));
+  const list = el('div', { class: 'card', style: 'display:grid;gap:.7rem' }, el('h3', '🔢 Deine Ergebnisse'));
+  c.items.forEach((it, k) => {
+    const sid = t.id + '.' + (k + 1), inp = el('input', { class: 'inp ans', inputmode: 'decimal', placeholder: '?' }), go = el('button', { class: 'btn small', html: 'Prüfen' }), fb = el('div', { class: 'fb' });
+    let tries = 0, over = !!ST.stars[sid];
+    if (over) { inp.value = fmt(it.a); inp.classList.add('right'); fb.className = 'fb ok'; fb.innerHTML = '✅ richtig'; }
+    const chk = () => {
+      if (over) return; const v = parseDE(inp.value); if (isNaN(v)) return;
+      if (same(v, it.a)) { over = true; inp.classList.add('right'); award(sid); fb.className = 'fb ok'; fb.innerHTML = '✅ richtig'; return; }
+      miss(); tries++;
+      if (tries >= 2) { over = true; fb.className = 'fb err'; fb.innerHTML = T('❌ Richtig ist <b>' + fmt(it.a) + '</b>. Suche den Fehler in deinem Heft und verbessere ihn mit einer anderen Farbe.' + (it.sol ? '<div class="solbox">' + it.sol + '</div>' : '')); }
+      else { fb.className = 'fb err'; fb.innerHTML = T('❌ ' + (c.hint || 'Prüfe deine Rechnung im Heft noch einmal.')); }
+    };
+    go.addEventListener('click', chk); inp.addEventListener('keydown', e => { if (e.key === 'Enter') chk(); });
+    list.append(el('div', {}, el('div', { class: 'exprrow' }, el('span', { class: 'expr', html: `${'abcdefg'[k]}) ${it.q} =` }), inp, signBtn(inp), go), fb));
+  });
+  L.append(list);
+  const f = el('div'); Rr.append(f);
+  fotoBlock(f, t.id, t.id + '.' + (c.items.length + 1), () => f.append(taskNav(t)), 'Foto von deinen Rechnungen');
+}
+
+/* Foto aufnehmen und an Google Drive senden (key = Name des Fotos, starId = Stern dafür) */
+function fotoBlock(host, key, starId, after, title) {
+  const have = ST.fotos[key], pend = pendGet()[key];
+  const status = el('div', { class: 'fb ' + (have || pend ? 'info' : ''), html: pend ? '⏳ Dein Foto wartet auf Internet. Es wird automatisch gesendet.' : have ? `✅ Du hast schon ein Foto gesendet (${new Date(have.t).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })}). Ein neues Foto ersetzt das alte.` : '' });
+  const inp = el('input', { type: 'file', accept: 'image/*', capture: 'environment', style: 'display:none' });
+  const shot = el('div', { class: 'shot' }), fb2 = el('div', { class: 'fb' });
+  const take = el('button', { class: 'btn', html: '📷 Foto aufnehmen' }), send = el('button', { class: 'btn', html: '⬆️ Foto senden', hidden: '' });
+  let data = null;
+  take.addEventListener('click', () => inp.click());
+  inp.addEventListener('change', async () => {
+    const f = inp.files && inp.files[0]; inp.value = ''; if (!f) return;
+    fb2.className = 'fb info'; fb2.innerHTML = 'Das Foto wird vorbereitet …';
+    try { data = await compress(f); } catch (e) { fb2.className = 'fb err'; fb2.innerHTML = 'Das Bild konnte nicht gelesen werden. Versuche es noch einmal.'; return; }
+    shot.innerHTML = ''; shot.append(el('img', { src: data, alt: 'Foto von deinem Heft' }));
+    fb2.className = 'fb info'; fb2.innerHTML = 'Ist alles gut lesbar und scharf? Dann tippe auf <b>Foto senden</b>.';
+    take.innerHTML = '📷 Neues Foto'; take.className = 'btn sec'; send.hidden = false;
+  });
+  send.addEventListener('click', async () => {
+    if (!data) return; send.disabled = take.disabled = true; fb2.className = 'fb info'; fb2.innerHTML = '⏳ Das Foto wird gesendet …';
+    const r = await sendFoto(key, data); send.disabled = take.disabled = false;
+    if (r === 'ok' || r === 'local') { send.hidden = true; data = null; status.className = 'fb'; status.innerHTML = ''; award(starId); fb2.className = 'fb ok'; fb2.innerHTML = r === 'ok' ? '✅ Das Foto ist angekommen. Deine Lehrkraft kann es sehen. ⭐' : '✅ Gespeichert (nur auf diesem Gerät).'; after && after(); }
+    else if (r === 'later') { send.hidden = true; data = null; fb2.className = 'fb info'; fb2.innerHTML = '📶 Kein Internet. Das Foto wird <b>automatisch gesendet</b>, sobald Internet da ist. Dann bekommst du den Stern.'; FOTOSTAR[key] = starId; after && after(); }
+    else { fb2.className = 'fb err'; fb2.innerHTML = r; }
+  });
+  host.append(el('div', { class: 'card fotocard', style: 'display:grid;gap:.7rem' }, el('h3', '📷 ' + (title || 'Foto von deinem Heft')),
+    el('div', { class: 'box', html: T('<ul style="margin:0;padding-left:1.2rem"><li>Lege das Heft <b>flach</b> auf den Tisch.</li><li>Halte das iPad <b>gerade</b> darüber.</li><li>Gutes Licht, <b>kein Schatten</b>.</li><li>Alles muss auf dem Foto <b>gut lesbar</b> sein.</li></ul>') }),
+    status, el('div', { class: 'row' }, take, send), inp, shot, fb2));
+}
+const FOTOSTAR = {};   // Foto-Schlüssel → Stern (für Fotos, die später gesendet werden)
+
+/* =====================================================================
+   TEST-ERGEBNISSE (Versuche zählen)
+   ===================================================================== */
+function testRecord(id, ok, n) { ST.tests = ST.tests || {}; const r = ST.tests[id] || { n: 0, best: 0, last: 0 }; r.n++; r.last = ok; r.best = Math.max(r.best, ok); r.of = n; ST.tests[id] = r; save(); }
+
+
+/* =====================================================================
+   1 · ADDIEREN UND SUBTRAHIEREN
+   ===================================================================== */
+const SA = 'Addieren und Subtrahieren';
+function genAddKopf() {
+  const a = dec(1, 0.1, 20), b = dec(1, 0.1, 10), plus = Math.random() < .5;
+  const [x, y] = plus ? [a, b] : [Math.max(a, b), Math.min(a, b)];
+  const r = plus ? x + y : x - y;
+  return itNum({ st: SA, again: genAddKopf, q: `${fmt(x)} ${plus ? '+' : '−'} ${fmt(y)}`, a: R9(r), hint: 'Rechne erst die Zehntel, dann die Ganzen.' });
+}
+function genAddSchr() {
+  const ka = rint(1, 3), kb = rint(1, 4), a = dec(ka, 0.05, 150), b = dec(kb === ka ? (kb % 4) + 1 : kb, 0.01, 60), plus = Math.random() < .55;
+  const [x, y] = plus ? [a, b] : [Math.max(a, b), Math.min(a, b)], r = R9(plus ? x + y : x - y);
+  return itNum({ st: SA, again: genAddSchr, q: `${fmt(x)} ${plus ? '+' : '−'} ${fmt(y)}`, a: r, hint: 'Schreibe die Zahlen so untereinander, dass <b>Komma unter Komma</b> steht. Fülle fehlende Stellen mit Nullen auf.', sol: kgrid(addLines(x, y, plus ? '+' : '−', r, { fill: true })) });
+}
+function genAddNeg() {
+  const a = dec(rint(1, 2), 0.1, 30), b = dec(rint(1, 2), 0.1, 30), f = rint(0, 4);
+  const forms = [[`−${fmt(a)} + ${fmt(b)}`, -a + b], [`${fmt(Math.min(a, b))} − ${fmt(Math.max(a, b))}`, Math.min(a, b) - Math.max(a, b)], [`−${fmt(a)} − ${fmt(b)}`, -a - b], [`${fmt(a)} + (−${fmt(b)})`, a - b], [`−${fmt(a)} − (−${fmt(b)})`, -a + b]];
+  const [q, r] = forms[f];
+  return itNum({ st: SA, again: genAddNeg, q, a: R9(r), hint: v => (Math.sign(v) !== Math.sign(r) ? 'Achte auf das <b>Vorzeichen</b>: Bestimme es zuerst. ' : '') + 'Tipp: + (− …) heißt minus, − (− …) heißt plus.' });
+}
+function genAddFind() {
+  const type = pick(['komma', 'uebertrag', 'uebertrag', 'ok', 'vorz']);
+  if (type === 'vorz') {
+    const a = dec(1, 2, 9), b = dec(1, 0.5, a - 0.5), r = R9(-a + b);
+    return itFind({ st: SA, again: genAddFind, type, a: r, opts: ['komma', 'uebertrag', 'vorz', 'ok'], pre: `<div class="stmtbig">−${fmt(a)} + ${fmt(b)} = ${fmt(-r)}</div>`, expl: `${fmt(a)} ist größer als ${fmt(b)}. Deshalb bekommt das Ergebnis das Vorzeichen der Zahl −${fmt(a)}: also <b>minus</b>.` });
+  }
+  for (let n = 0; n < 200; n++) {
+    const a = dec(rint(1, 2), 1, 99), b = dec(rint(3, 4), 1, 20), plus = Math.random() < .6;
+    const [x, y] = plus ? [a, b] : [Math.max(a, b), Math.min(a, b)], op = plus ? '+' : '−', r = R9(plus ? x + y : x - y);
+    if (type === 'ok') return itFind({ st: SA, again: genAddFind, type, a: r, pre: kgrid(addLines(x, y, op, r, { fill: true })), expl: 'Komma unter Komma, Überträge beachtet – alles richtig.' });
+    if (type === 'komma') {
+      if (dp(x) === dp(y)) continue;
+      const k = Math.max(dp(x), dp(y)), X = Math.round(x * 10 ** dp(x)), Y = Math.round(y * 10 ** dp(y)), W = plus ? X + Y : X - Y;
+      if (W <= 0) continue;
+      const shown = fmt(W / 10 ** dp(x));   // Komma wie beim oberen Faktor
+      return itFind({ st: SA, again: genAddFind, type, a: r, pre: kgrid(addLines(x, y, op, r, { right: true, shown: shown.replace(/^0,/, '0,') })), expl: 'Die Zahlen stehen rechtsbündig. Es muss aber <b>Komma unter Komma</b> stehen!' });
+    }
+    // Übertrag vergessen: eine Stelle mit Übertrag ist im Ergebnis um 1 falsch
+    const k = Math.max(dp(x), dp(y)), X = Math.round(x * 10 ** k), Y = Math.round(y * 10 ** k);
+    const col = [...Array(String(Math.max(X, Y)).length).keys()].find(i => { const dx = Math.floor(X / 10 ** i) % 10, dy = Math.floor(Y / 10 ** i) % 10; return plus ? dx + dy >= 10 : dx < dy; });
+    if (col == null) continue;
+    const wrong = R9(r + (plus ? -1 : 1) * 10 ** (col + 1 - k));
+    if (wrong <= 0) continue;
+    return itFind({ st: SA, again: genAddFind, type: 'uebertrag', a: r, pre: kgrid(addLines(x, y, op, r, { fill: true, shown: fmt(wrong) })), expl: plus ? 'Bei einer Stelle wurde der <b>Übertrag</b> nicht dazugezählt.' : 'Beim Subtrahieren wurde ein <b>Übertrag</b> (Entbündeln) vergessen.' });
+  }
+  return genAddFind();
+}
+const ADD_KNOBEL = [
+  () => { const r = dec(1, 3, 9), a = dec(1, 0.5, r - 0.5); return itNum({ st: SA, again: ADD_KNOBEL[0], intro: 'Welche Zahl gehört in das Kästchen?', q: '□', a: R9(r - a), hint: `Rechne rückwärts: ${fmt(r)} − ${fmt(a)}.`, pre: `<div class="stmtbig">${fmt(a)} + □ = ${fmt(r)}</div>` }); },
+  () => { const a = dec(1, 1, 9), r = dec(2, -15, -a - 1); return itNum({ st: SA, again: ADD_KNOBEL[1], intro: 'Welche Zahl gehört in das Kästchen?', q: '□', a: R9(r + a), hint: `Rechne rückwärts: ${fmt(r)} + ${fmt(a)}.`, pre: `<div class="stmtbig">−${fmt(a)} + □ = ${fmt(r)}</div>` }); },
+  () => { const x = pick([0.49, 0.15, 0.009, 0.375, 0.08, 0.61]), neg = Math.random() < .3, v = neg ? -x : x; return itNum({ st: SA, again: ADD_KNOBEL[2], intro: `Welche Zahl muss man zu <b>${fmt(v)}</b> addieren, um <b>1</b> zu erhalten?`, q: '□', a: R9(1 - v), hint: `Rechne 1 − ${P(v)}.` }); },
+  () => itNum({ st: SA, again: ADD_KNOBEL[3], intro: '🧳 Leos Koffer wiegt 11,45 kg, seine Tasche 8,7 kg. Wie schwer ist sein Fluggepäck?', q: 'Gepäck', a: 20.15, unit: 'kg', hint: '11,45 + 8,70' }),
+  () => itNum({ st: SA, again: ADD_KNOBEL[4], intro: '🧳 Tina hat einen Koffer mit 13,83 kg. Im Flugzeug sind 20 kg erlaubt. Wie schwer darf ihr zweiter Koffer höchstens sein?', q: 'zweiter Koffer', a: 6.17, unit: 'kg', hint: '20,00 − 13,83' }),
+  () => itNum({ st: SA, again: ADD_KNOBEL[5], intro: '🚲 Rebecca fährt 208,4 km in zwei Tagen. Am ersten Tag schafft sie 123,92 km. Wie weit muss sie am zweiten Tag fahren?', q: 'zweiter Tag', a: 84.48, unit: 'km', hint: '208,40 − 123,92' }),
+  () => itNum({ st: SA, again: ADD_KNOBEL[6], intro: '🏃 Usain Bolt lief 2002 die 200 m in 20,61 s. 2009 brauchte er 1,42 s weniger. Welche Zeit lief er 2009?', q: 'Zeit 2009', a: 19.19, unit: 's', hint: '20,61 − 1,42' })
+];
+const ST_A = {
+  id: 'A', title: 'Addieren und Subtrahieren', icon: '➕', sub: 'Komma unter Komma – auch mit negativen Zahlen',
+  tasks: [
+    { id: 'A0', kind: 'learn', title: 'Lernen: Addieren und Subtrahieren', sub: 'Komma unter Komma, Vorzeichen', steps: [
+      { type: 'info', title: 'Rechnen mit Geld', html: `<p>Du kaufst etwas für <b>3,28 €</b> und etwas für <b>4,27 €</b>. Du kannst in <b>Cent</b> rechnen oder in <b>Euro</b>:</p>
+        <div class="row" style="gap:2rem;align-items:flex-start"><div><b>in Cent</b>${kgrid([' 328', { t: '+427', u: true }, { t: '  1', c: 'carry' }, { t: ' 755', c: 'res' }])}</div><div><b>in Euro</b>${kgrid([' 3,28', { t: '+4,27', u: true }, { t: '   1', c: 'carry' }, { t: ' 7,55', c: 'res' }])}</div></div>
+        <p>Das Ergebnis ist gleich: 755 ct = 7,55 €. Wichtig: Beim Rechnen in Euro steht <b>Komma unter Komma</b>. So stehen Euro unter Euro und Cent unter Cent.</p>` },
+      { type: 'info', title: 'Schriftlich addieren und subtrahieren', html: `<div class="merk"><b class="t">Merke</b>1. Schreibe die Zahlen so untereinander, dass <b>Komma unter Komma</b> steht.<br>2. Fülle fehlende Stellen mit <b>Nullen</b> auf.<br>3. Rechne wie mit natürlichen Zahlen (Übertrag!).<br>4. Setze im Ergebnis das Komma <b>unter die anderen Kommas</b>.</div>
+        <div class="row" style="gap:2rem;align-items:flex-start"><div><b>12,534 + 8,91</b>${kgrid(['  12,534', { t: '+  8,910', u: true }, { t: '  1 1', c: 'carry' }, { t: '  21,444', c: 'res' }])}</div><div><b>12,534 − 8,91</b>${kgrid(['  12,534', { t: '−  8,910', u: true }, { t: '  1 1', c: 'carry' }, { t: '   3,624', c: 'res' }])}</div></div>
+        <p class="mut">Die rote 0 bei 8,910 ist aufgefüllt. Sie ändert den Wert nicht: 8,91 = 8,910.</p>` },
+      { type: 'check', title: 'Welche Schreibweise ist richtig?', q: 'Du willst <b>45,6 + 9,0132</b> rechnen. Welche Schreibweise ist richtig?', opts: [kgrid([' 45,6000', { t: '+ 9,0132', u: true }]), kgrid(['   45,6', { t: '+9,0132', u: true }]), kgrid([' 45,6', { t: '+9,0132', u: true }])], hint: 'Euro unter Euro, Cent unter Cent: Komma unter Komma!', expl: 'Komma unter Komma – und die fehlenden Stellen mit Nullen auffüllen.' },
+      { type: 'check', title: 'Rechne', q: '3,28 + 4,27', a: 7.55, hint: 'Komma unter Komma! 8 + 7 = 15 → Übertrag.', expl: '3,28 + 4,27 = 7,55' },
+      { type: 'check', title: 'Rechne', q: '8,71 − 3,6', a: 5.11, hint: 'Schreibe 3,6 als 3,60. Dann Komma unter Komma.', expl: '8,71 − 3,60 = 5,11' },
+      { type: 'heft', title: 'Heft-Eintrag 1: Komma unter Komma', task: 'Schreibe in dein Arbeitsheft: die <b>Überschrift</b>, den <b>Merksatz</b> und die <b>zwei Beispiele</b> schriftlich untereinander.', html: `<b><u>Addieren und Subtrahieren von Dezimalzahlen</u></b><br>1. Zahlen untereinander schreiben: Komma unter Komma.<br>2. Fehlende Stellen mit Nullen auffüllen.<br>3. Rechnen wie mit natürlichen Zahlen.<br>4. Komma im Ergebnis unter die anderen Kommas setzen.<div class="row" style="gap:2rem">${kgrid(['  12,534', { t: '+  8,910', u: true }, { t: '  21,444', c: 'res' }])}${kgrid(['  12,534', { t: '−  8,910', u: true }, { t: '   3,624', c: 'res' }])}</div>` },
+      { type: 'info', title: 'Mit negativen Zahlen', html: `<p>Kommen negative Zahlen vor, gehst du vor wie bei ganzen Zahlen: <b>Zuerst bestimmst du das Vorzeichen des Ergebnisses. Dann rechnest du.</b></p>
+        <table class="tbl"><tr><th>Aufgabe</th><th>Vorzeichen</th><th>Rechnung</th><th>Ergebnis</th></tr>
+        <tr><td>−9,31 − 5,8</td><td>−</td><td>9,31 + 5,80 = 15,11</td><td><b>−15,11</b></td></tr>
+        <tr><td>18,9 − 123,01</td><td>−</td><td>123,01 − 18,90 = 104,11</td><td><b>−104,11</b></td></tr>
+        <tr><td>−6,301 + 4,7</td><td>−</td><td>6,301 − 4,700 = 1,601</td><td><b>−1,601</b></td></tr></table>
+        <p>Tipp: Denke an die Zahlengerade oder an ein Thermometer. <b>+ (−2,5)</b> ist dasselbe wie <b>− 2,5</b>. <b>− (−2,5)</b> ist dasselbe wie <b>+ 2,5</b>.</p>` },
+      { type: 'check', title: 'Vorzeichen', q: 'Welches Vorzeichen hat das Ergebnis von <b>−6,3 + 4,7</b>?', opts: ['minus (−)', 'plus (+)', 'Das Ergebnis ist 0.'], expl: '6,3 ist größer als 4,7. Die negative Zahl „gewinnt“: −1,6.' },
+      { type: 'check', title: 'Rechne', q: '2,5 − 7,3', a: -4.8, hint: 'Das Ergebnis ist negativ. Rechne 7,3 − 2,5 und setze ein Minus davor.', expl: '2,5 − 7,3 = −4,8' },
+      { type: 'heft', title: 'Heft-Eintrag 2: Negative Dezimalzahlen', task: 'Schreibe das Beispiel <b>18,9 − 123,01</b> in dein Heft – mit allen drei Schritten.', html: `<b><u>Mit negativen Dezimalzahlen</u></b><br>18,9 − 123,01<br>① Vorzeichen des Ergebnisses: <b>−</b> (123,01 ist größer)<br>② Rechnung: ${kgrid(['  123,01', { t: '−  18,90', u: true }, { t: '  104,11', c: 'res' }])}③ Ergebnis: 18,9 − 123,01 = <b>−104,11</b>` }
+    ] },
+    { id: 'A1', lvl: 1, stars: 3, title: 'Kopfrechnen', sub: '1,4 + 0,6 · 9,9 − 3,8 …', run: h => runRound(h, findTask('A1'), { n: 8, make: () => genAddKopf() }) },
+    { id: 'A2', kind: 'heft', lvl: 2, title: 'Im Heft: schriftlich rechnen 📷', sub: 'Ordentlich rechnen, Ergebnisse eingeben, Foto senden', cfg: { how: 'Schreibe jede Aufgabe <b>untereinander</b> in dein Heft: <b>Komma unter Komma</b>, fehlende Stellen mit <b>Nullen</b> auffüllen, Überträge klein darüber oder darunter. Unter jede Rechnung ziehst du einen Strich mit dem Lineal.', hint: 'Steht Komma unter Komma? Hast du alle Überträge beachtet?',
+      items: [[5.19, '+', 2.73], [0.056, '+', 1.27], [17.386, '+', 125.6], [3.56, '−', 0.9563]].map(([a, op, b]) => { const r = R9(op === '+' ? a + b : a - b); return { q: `${fmt(a)} ${op} ${fmt(b)}`, a: r, sol: kgrid(addLines(a, b, op, r, { fill: true })) }; }) } },
+    { id: 'A3', lvl: 2, stars: 3, title: 'Schriftlich rechnen', sub: 'nur das Ergebnis eingeben', run: h => runRound(h, findTask('A3'), { n: 6, make: () => genAddSchr() }) },
+    { id: 'A4', lvl: 2, stars: 3, title: 'Mit negativen Zahlen', sub: '−3,7 + 0,9 · 5,1 − 6,4 · −0,3 − (−0,8)', run: h => runRound(h, findTask('A4'), { n: 7, make: () => genAddNeg() }) },
+    { id: 'A5', lvl: 3, stars: 3, title: 'Fehler finden 🔍', sub: 'Was wurde falsch gerechnet?', run: h => runRound(h, findTask('A5'), { n: 5, make: () => genAddFind() }) },
+    { id: 'A6', lvl: 3, stars: 3, title: 'Knobeln und Sachaufgaben', sub: 'Fehlende Zahlen, Koffer, Radweg …', run: h => { const o = shuffle(ADD_KNOBEL).slice(0, 6); runRound(h, findTask('A6'), { n: 6, make: i => o[i]() }); } },
+    { id: 'AT', kind: 'test', stars: 3, title: 'Test: Addieren und Subtrahieren', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genAddKopf, genAddKopf, genAddSchr, genAddSchr, genAddNeg, genAddNeg, genAddFind, () => pick(ADD_KNOBEL)()] }
+  ] };
+
+/* =====================================================================
+   2 · RECHENREGELN BEI SUMMEN UND DIFFERENZEN
+   ===================================================================== */
+const SB = 'Rechenregeln';
+function genVorteil() {
+  for (let n = 0; n < 100; n++) {
+    const f = rint(0, 3);
+    if (f === 0) { const a = dec(1, 1, 9), b = dec(1, 1, 20); return itNum({ st: SB, again: genVorteil, q: `${fmt(a)} + ${fmt(b)} − ${fmt(a)}`, a: R9(b), hint: `Vertausche: ${fmt(a)} − ${fmt(a)} = 0.` }); }
+    if (f === 1) { const a = dec(1, 5, 20), c = R9(Math.ceil(a) - a + rint(0, 3)); if (c <= 0) continue; const b = dec(2, 1, 9); return itNum({ st: SB, again: genVorteil, q: `${fmt(a)} − ${fmt(b)} + ${fmt(c)}`, a: R9(a + c - b), hint: `Vertausche: ${fmt(a)} + ${fmt(c)} = ${fmt(a + c)} ist eine ganze Zahl.` }); }
+    if (f === 2) { const a = dec(2, 5, 15), b = dec(1, 1, 9), c = R9(Math.round(a + 0.5) - a); if (c <= 0) continue; return itNum({ st: SB, again: genVorteil, q: `${fmt(a)} − ${fmt(b)} + ${fmt(c)}`, a: R9(a - b + c), hint: `Vertausche: ${fmt(a)} + ${fmt(c)} = ${fmt(a + c)}.` }); }
+    const a = dec(1, 10, 60), b = dec(1, 10, 60), c = R9(rint(20, 60) - b); if (c <= 0) continue; return itNum({ st: SB, again: genVorteil, q: `${fmt(a)} − ${fmt(b)} − ${fmt(c)}`, a: R9(a - b - c), hint: `Fasse zusammen: ${fmt(b)} + ${fmt(c)} = ${fmt(b + c)}. Also ${fmt(a)} − ${fmt(b + c)}.` });
+  }
+}
+function genKlammer() {
+  const a = dec(1, 10, 40), b = dec(1, 1, 15), c = dec(1, 1, 9), f = rint(0, 3);
+  const F = [[`${fmt(a)} − (${fmt(b)} + ${fmt(c)})`, a - b - c, `${fmt(a)} − ${fmt(b)} − ${fmt(c)}`], [`${fmt(a)} − (${fmt(b)} − ${fmt(c)})`, a - b + c, `${fmt(a)} − ${fmt(b)} + ${fmt(c)}`], [`${fmt(a)} + (${fmt(b)} − ${fmt(c)})`, a + b - c, `${fmt(a)} + ${fmt(b)} − ${fmt(c)}`], [`(${fmt(a)} − ${fmt(b)}) − (${fmt(c)} + ${fmt(b)})`, a - b - c - b, `${fmt(a)} − ${fmt(b)} − ${fmt(c)} − ${fmt(b)}`]][f];
+  return itNum({ st: SB, again: genKlammer, q: F[0], a: R9(F[1]), hint: `Minusklammer auflösen: Alle Zeichen in der Klammer drehen sich um. ${F[0]} = ${F[2]}` });
+}
+function genRegelFind() {
+  const a = dec(1, 3, 9), b = dec(1, 0.5, 2), c = dec(1, 0.2, 1), ok = Math.random() < .35;
+  const right = R9(a - b - c), wrong = R9(a - b + c);
+  return itWFfix({ st: SB, again: genRegelFind, ok, a: right, stmt: `${fmt(a)} − (${fmt(b)} + ${fmt(c)})<br>= ${fmt(a)} − ${fmt(b)} ${ok ? '−' : '+'} ${fmt(c)}<br>= ${fmt(ok ? right : wrong)}`, expl: 'Bei einer <b>Minusklammer</b> drehen sich alle Zeichen in der Klammer um: aus + wird −.' });
+}
+const ST_B = {
+  id: 'B', title: 'Rechenregeln', icon: '🔀', sub: 'Klammern, Vertauschen, Minusklammer',
+  tasks: [
+    { id: 'B0', kind: 'learn', title: 'Lernen: Rechenregeln bei Summen und Differenzen', sub: 'Vier Regeln mit Beispielen', steps: [
+      { type: 'info', title: 'Die vier Regeln', html: `<div class="merk"><b class="t">Reihenfolge beim Berechnen von Summen und Differenzen</b>
+        1. <b>Klammern</b> werden zuerst berechnet: &nbsp; 0,8 − (2 − 3,6) = 0,8 − (−1,6) = 2,4<br>
+        2. Es wird von <b>links nach rechts</b> gerechnet: &nbsp; 7,5 − 2,5 + 1 = 5 + 1 = 6<br>
+        3. Die Reihenfolge darf man <b>vertauschen</b>, wenn die Plus- und Minuszeichen <b>mitgenommen</b> werden: &nbsp; −1,8 + 7,3 − 1,2 = −1,8 − 1,2 + 7,3 = −3 + 7,3 = 4,3<br>
+        4. Man darf <b>Klammern auflösen</b>. Bei einer <b>Minusklammer</b> drehen sich alle Zeichen um: &nbsp; 3,8 − (3,8 − 1,2) = 3,8 − 3,8 + 1,2 = 1,2</div>` },
+      { type: 'check', title: 'Vorteilhaft rechnen', html: '<p>Tipp: Vertausche so, dass du schöne Zahlen bekommst.</p>', q: '18,7 − 52,9 + 1,3', a: -32.9, hint: '18,7 + 1,3 = 20. Dann 20 − 52,9.', expl: '18,7 + 1,3 − 52,9 = 20 − 52,9 = −32,9' },
+      { type: 'check', title: 'Minusklammer', q: 'Wie löst man <b>22,9 − (12,9 + 8,5)</b> richtig auf?', opts: ['22,9 − 12,9 − 8,5', '22,9 − 12,9 + 8,5', '22,9 + 12,9 − 8,5'], hint: 'Bei einer Minusklammer drehen sich alle Zeichen um.', expl: 'Aus + 8,5 in der Klammer wird − 8,5. Ergebnis: 10 − 8,5 = 1,5.' },
+      { type: 'check', title: 'Rechne', q: '13,6 + (24,3 + 4,7)', a: 42.6, hint: 'Klammer zuerst: 24,3 + 4,7 = 29.', expl: '13,6 + 29 = 42,6' },
+      { type: 'heft', title: 'Heft-Eintrag: Rechenregeln', task: 'Schreibe die <b>vier Regeln</b> mit je <b>einem Beispiel</b> in dein Heft.', html: `<b><u>Rechenregeln bei Summen und Differenzen</u></b><br>1. Klammern zuerst: 0,8 − (2 − 3,6) = 0,8 − (−1,6) = 2,4<br>2. Von links nach rechts: 7,5 − 2,5 + 1 = 6<br>3. Vertauschen mit Vorzeichen: −1,8 + 7,3 − 1,2 = −1,8 − 1,2 + 7,3 = 4,3<br>4. Minusklammer auflösen: 3,8 − (3,8 − 1,2) = 3,8 − 3,8 + 1,2 = 1,2` }
+    ] },
+    { id: 'B1', lvl: 2, stars: 3, title: 'Vorteilhaft rechnen', sub: 'Vertauschen und zusammenfassen', run: h => runRound(h, findTask('B1'), { n: 6, make: () => genVorteil() }) },
+    { id: 'B2', lvl: 3, stars: 3, title: 'Klammern auflösen', sub: 'Achtung Minusklammer!', run: h => runRound(h, findTask('B2'), { n: 6, make: () => genKlammer() }) },
+    { id: 'B3', lvl: 3, stars: 3, title: 'Fehler finden 🔍', sub: 'Wurde die Klammer richtig aufgelöst?', run: h => runRound(h, findTask('B3'), { n: 5, make: () => genRegelFind() }) },
+    { id: 'BT', kind: 'test', stars: 3, title: 'Test: Rechenregeln', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genVorteil, genVorteil, genVorteil, genKlammer, genKlammer, genKlammer, genRegelFind, genRegelFind] }
+  ] };
+
+/* =====================================================================
+   3 · MULTIPLIZIEREN UND DIVIDIEREN MIT ZEHNERPOTENZEN
+   ===================================================================== */
+const SC = 'Zehnerpotenzen';
+const POW = [10, 100, 1000, 10000];
+const powTxt = (p, exp) => exp && p >= 1000 ? '10' + SUP[String(Math.log10(p))] : fmt(p);
+function genPow() {
+  const x = dec(rint(1, 3), 0.01, 90), p = pick(POW), mul = Math.random() < .5, exp = Math.random() < .3, r = R9(mul ? x * p : x / p);
+  return itNum({ st: SC, again: genPow, q: `${fmt(x)} ${mul ? '·' : ':'} ${powTxt(p, exp)}`, a: r, hint: `${mul ? 'Mal' : 'Geteilt durch'} ${fmt(p)}: Das Komma wandert um <b>${Math.log10(p)} Stellen</b> nach <b>${mul ? 'rechts' : 'links'}</b>. Fehlen Ziffern, ergänze Nullen.` });
+}
+function genPowFind() {
+  const x = dec(rint(1, 3), 0.01, 90), p = pick([10, 100, 1000, 10000, 100000]), mul = Math.random() < .5, y = R9(mul ? x * p : x / p);
+  return itMC({ st: SC, again: genPowFind, q: `Welche Zahl gehört in das Kästchen?<div class="stmtbig">${fmt(x)} ${mul ? '·' : ':'} □ = ${fmt(y)}</div>`, right: fmt(p), wrong: [10, 100, 1000, 10000, 100000].filter(v => v !== p).map(fmt), keep: true, expl: `Das Komma ist um ${Math.log10(p)} Stellen nach ${mul ? 'rechts' : 'links'} gewandert. Also ${mul ? '·' : ':'} ${fmt(p)}.` });
+}
+function genChain() {
+  const x = dec(3, 1, 60), ops = [];
+  let v = x, e = 0; for (let i = 0; i < 3; i++) { let p, m; do { p = pick([10, 100, 1000, 10000]); m = Math.random() < .5; } while (e + (m ? 1 : -1) * Math.log10(p) < -4 || e + (m ? 1 : -1) * Math.log10(p) > 5); e += (m ? 1 : -1) * Math.log10(p); ops.push((m ? '·' : ':') + ' ' + fmt(p)); v = R9(m ? v * p : v / p); }
+  return itNum({ st: SC, again: genChain, intro: '⛓ Rechne die Kette Schritt für Schritt. Gib nur das <b>Endergebnis</b> ein.', pre: `<div class="chain"><b>${fmt(x)}</b>${ops.map(o => ` <span>→ ${o} →</span> □`).join('')}</div>`, q: 'Endergebnis', a: v, hint: 'Zähle bei jedem Schritt die Stellen. Rechts bei ·, links bei :.' });
+}
+function genPowFind2() {
+  const x = dec(rint(1, 3), 0.1, 90), p = pick([10, 100, 1000]), mul = Math.random() < .5, ok = Math.random() < .35, right = R9(mul ? x * p : x / p), wrong = R9(mul ? x / p : x * p);
+  return itWFfix({ st: SC, again: genPowFind2, ok, a: right, stmt: `${fmt(x)} ${mul ? '·' : ':'} ${fmt(p)} = ${fmt(ok ? right : wrong)}`, expl: `Bei ${mul ? '· (mal)' : ': (geteilt)'} ${fmt(p)} wandert das Komma um ${Math.log10(p)} Stellen nach <b>${mul ? 'rechts' : 'links'}</b>.` });
+}
+const POW_SACH = [
+  () => itNum({ st: SC, again: POW_SACH[0], intro: '🥓 1 kg Schinken kostet 18,50 €. Wie viel kosten 100 g? (1 kg = 1000 g)', q: 'Preis für 100 g', a: 1.85, unit: '€', hint: '100 g sind der 10. Teil von 1 kg: 18,50 : 10' }),
+  () => itNum({ st: SC, again: POW_SACH[1], intro: '🔬 Ein Mikroskop vergrößert 1000-fach. Ein Bakterium ist 0,004 mm lang. Wie lang erscheint es?', q: 'Länge', a: 4, unit: 'mm', hint: '0,004 · 1000' }),
+  () => itNum({ st: SC, again: POW_SACH[2], intro: '🌶 10 g eines Gewürzes kosten 0,45 €. Was kostet ein Kilogramm (1000 g)?', q: 'Preis für 1 kg', a: 45, unit: '€', hint: '1000 g sind 100-mal so viel wie 10 g: 0,45 · 100' }),
+  () => itNum({ st: SC, again: POW_SACH[3], intro: '🚗 Ein Auto verbraucht 6,2 l Benzin auf 100 km. Wie viel ist das auf 1 km?', q: 'Verbrauch', a: 0.062, unit: 'l', hint: '6,2 : 100' }),
+  () => itNum({ st: SC, again: POW_SACH[4], intro: '🍵 Ein Teebeutel wiegt 2 g und kostet 0,46 €. Was kostet 1 kg Tee in Beuteln? (1 kg = 1000 g = 500 Beutel)', q: 'Preis', a: 230, unit: '€', hint: '500 Beutel: 0,46 · 500 = 0,46 · 1000 : 2' })
+];
+const ST_C = {
+  id: 'C', title: 'Zehnerpotenzen', icon: '🔟', sub: '· und : mit 10, 100, 1000 – Komma verschieben',
+  tasks: [
+    { id: 'C0', kind: 'learn', title: 'Lernen: Mit Zehnerpotenzen rechnen', sub: 'Das Komma wandert', steps: [
+      { type: 'info', title: 'Das Komma wandert', html: `<table class="tbl"><tr><th>42,531 · 10</th><th>42,531 · 100</th><th>42,531 : 10</th><th>42,531 : 1000</th></tr><tr><td><b>425,31</b></td><td><b>4253,1</b></td><td><b>4,2531</b></td><td><b>0,042531</b></td></tr></table>
+        <p>Die <b>Ziffernfolge bleibt gleich</b>. Nur das <b>Komma wird verschoben</b>. Reichen die Ziffern nicht, ergänzt man <b>Nullen</b>.</p>
+        <div class="merk"><b class="t">Merke</b>Beim <b>Multiplizieren</b> mit 10, 100, 1000, … verschiebt sich das Komma um 1, 2, 3, … Stellen nach <b>rechts</b>.<br>Beim <b>Dividieren</b> durch 10, 100, 1000, … verschiebt sich das Komma um 1, 2, 3, … Stellen nach <b>links</b>.<br><span class="mut">Das Komma wandert so viele Stellen, wie die Zehnerpotenz Nullen hat.</span></div>
+        <p><b>Zehnerpotenzen:</b> 10¹ = 10 · 10² = 100 · 10³ = 1000 · 10⁴ = 10 000 …</p>` },
+      { type: 'check', title: 'Rechne', q: '3,157 · 100', a: 315.7, hint: '100 hat 2 Nullen: 2 Stellen nach rechts.', expl: '3,157 · 100 = 315,7' },
+      { type: 'check', title: 'Rechne', q: '32,7 · 10³', a: 32700, hint: '10³ = 1000: 3 Stellen nach rechts. Ergänze Nullen.', expl: '32,7 · 1000 = 32 700' },
+      { type: 'check', title: 'Rechne', q: '2,5 : 1000', a: 0.0025, hint: '3 Stellen nach links. Ergänze Nullen vor der 2.', expl: '2,5 : 1000 = 0,0025' },
+      { type: 'heft', title: 'Heft-Eintrag: Zehnerpotenzen', task: 'Schreibe den <b>Merksatz</b> und die <b>drei Beispiele</b> in dein Heft. Zeichne kleine Bögen für jede Stelle, die das Komma wandert.', html: `<b><u>Multiplizieren und Dividieren mit Zehnerpotenzen</u></b><br>· 10, 100, 1000 → Komma 1, 2, 3 Stellen nach <b>rechts</b><br>: 10, 100, 1000 → Komma 1, 2, 3 Stellen nach <b>links</b><br>Fehlende Stellen mit Nullen auffüllen.<br>3,157 · 100 = 315,7<br>32,7 · 10³ = 32 700<br>2,5 : 1000 = 0,0025` },
+      { type: 'info', title: 'Welche Zehnerpotenz fehlt?', html: `<p><b>0,0032 · □ = 32</b>: Das Komma ist um <b>4 Stellen nach rechts</b> gewandert. Also □ = 10⁴ = 10 000.</p><p><b>0,057 : □ = 0,00057</b>: Das Komma ist um <b>2 Stellen nach links</b> gewandert. Also □ = 100.</p>` },
+      { type: 'check', title: 'Welche Zahl fehlt?', q: '<b>82,4 : □ = 0,0000824</b>. Welche Zahl gehört in das Kästchen?', opts: ['1 000 000', '10 000', '100 000', '1000'], hint: 'Zähle, um wie viele Stellen das Komma nach links gewandert ist.', expl: 'Das Komma ist 6 Stellen nach links gewandert: 10⁶ = 1 000 000.' }
+    ] },
+    { id: 'C1', lvl: 1, stars: 3, title: 'Komma verschieben', sub: '· und : mit 10, 100, 1000, 10 000', run: h => runRound(h, findTask('C1'), { n: 8, make: () => genPow() }) },
+    { id: 'C2', lvl: 2, stars: 3, title: 'Welche Zehnerpotenz fehlt?', sub: '0,547 · □ = 54,7', run: h => runRound(h, findTask('C2'), { n: 6, make: () => genPowFind() }) },
+    { id: 'C3', lvl: 2, stars: 3, title: 'Zahlenketten', sub: 'Mehrere Schritte hintereinander', run: h => runRound(h, findTask('C3'), { n: 4, make: () => genChain() }) },
+    { id: 'C4', lvl: 3, stars: 3, title: 'Fehler finden und Sachaufgaben', sub: 'Richtige Richtung? Preise und Mikroskop', run: h => { const o = shuffle(POW_SACH).slice(0, 3); runRound(h, findTask('C4'), { n: 6, make: i => i % 2 ? genPowFind2() : o[i >> 1]() }); } },
+    { id: 'CT', kind: 'test', stars: 3, title: 'Test: Zehnerpotenzen', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genPow, genPow, genPow, genPowFind, genPowFind, genChain, genPowFind2, () => pick(POW_SACH)()] }
+  ] };
+
+/* =====================================================================
+   4 · MULTIPLIZIEREN VON DEZIMALZAHLEN
+   ===================================================================== */
+const SD = 'Multiplizieren';
+function genMulKopf() {
+  const a = rint(1, 12) / 10 ** rint(0, 2), b = rint(2, 9) / 10 ** rint(1, 2);
+  return itNum({ st: SD, again: genMulKopf, q: `${fmt(a)} · ${fmt(b)}`, a: R9(a * b), hint: `Rechne ohne Komma und zähle die Nachkommastellen: ${dp(a)} + ${dp(b)} = ${dp(a) + dp(b)}.` });
+}
+function genMulKomma() {
+  const a = dec(rint(1, 2), 0.1, 40), b = dec(rint(1, 3), 0.01, 9), A = Math.round(a * 10 ** dp(a)), B = Math.round(b * 10 ** dp(b)), r = R9(a * b);
+  return itNum({ st: SD, again: genMulKomma, intro: 'Hier fehlt im Ergebnis das <b>Komma</b>. Schreibe das Ergebnis mit Komma.', pre: `<div class="stmtbig">${fmt(a)} · ${fmt(b)} = ${String(A * B).padStart(dp(a) + dp(b) + 1, '0')}</div>`, q: `${fmt(a)} · ${fmt(b)}`, a: r, hint: `Zähle die Nachkommastellen: ${dp(a)} + ${dp(b)} = ${dp(a) + dp(b)}. So viele Stellen hat das Ergebnis nach dem Komma.` });
+}
+function genMulSchr() {
+  const a = dec(rint(1, 2), 1, 60), b = dec(rint(1, 2), 0.1, 9), r = R9(a * b), ue = Math.round(a) * Math.max(1, Math.round(b));
+  return itNum({ st: SD, again: genMulSchr, intro: `Überschlage zuerst im Kopf (≈ ${fmt(Math.round(a))} · ${fmt(Math.round(b) || 1)}). Rechne dann schriftlich.`, q: `${fmt(a)} · ${fmt(b)}`, a: r, hint: v => (Math.abs(v / r) > 5 || Math.abs(v / r) < .2 ? `Dein Ergebnis passt nicht zum Überschlag (≈ ${fmt(ue)}). Prüfe das Komma! ` : '') + `Das Ergebnis hat ${dp(a) + dp(b)} Nachkommastellen.`, sol: kgrid(mulLines(a, b).lines) });
+}
+function genMulFind() {
+  const t = rint(0, 2);
+  if (t === 0) {   // schriftlich mit Fehler
+    for (let n = 0; n < 50; n++) {
+      const a = dec(rint(1, 2), 1, 50), b = dec(1, 1.1, 9.9), r = R9(a * b), type = pick(['nks', 'nks', 'shift', 'ok']);
+      if (String(Math.round(b * 10)).length < 2) continue;
+      const M = type === 'nks' ? mulLines(a, b, { k: dp(a) + dp(b) + pick([-1, 1]) }) : type === 'shift' ? mulLines(a, b, { noShift: true }) : mulLines(a, b);
+      if (type === 'nks' && (dp(a) + dp(b) - 1 < 0)) continue;
+      return itFind({ st: SD, again: genMulFind, type, a: r, opts: ['nks', 'shift', 'komma', 'ok'], pre: kgrid(M.lines), expl: type === 'nks' ? `Das Ergebnis muss ${dp(a) + dp(b)} Nachkommastellen haben (${dp(a)} + ${dp(b)}).` : type === 'shift' ? 'Das zweite Teilprodukt muss eine Stelle weiter nach rechts eingerückt werden.' : 'Teilprodukte und Komma stimmen.' });
+    }
+  }
+  const a = rint(2, 12) / 10, b = rint(2, 9) / 10 ** rint(1, 2), r = R9(a * b), wt = rint(0, 2), ok = Math.random() < .3;
+  const wrong = wt === 0 ? R9(r * 10) : wt === 1 ? R9(r / 10) : R9(a + b);
+  return itWFfix({ st: SD, again: genMulFind, ok, a: r, stmt: `${fmt(a)} · ${fmt(b)} = ${fmt(ok ? r : wrong)}`, expl: `${fmt(a)} hat ${dp(a)}, ${fmt(b)} hat ${dp(b)} Nachkommastelle(n). Das Ergebnis hat also ${dp(a) + dp(b)}: ${fmt(r)}.` });
+}
+const MUL_SACH = [
+  () => itNum({ st: SD, again: MUL_SACH[0], intro: '🏡 Ein Grundstück ist 10,8 m lang und 9,6 m breit. Berechne den Flächeninhalt.', q: 'Fläche', a: 103.68, unit: 'm²', hint: 'Fläche = Länge · Breite = 10,8 · 9,6' }),
+  () => itNum({ st: SD, again: MUL_SACH[1], intro: '🇨🇭 Sven tauscht 350 € in Schweizer Franken. Für 1 € bekommt er 1,20 Franken. Wie viele Franken bekommt er?', q: 'Franken', a: 420, unit: 'CHF', hint: '350 · 1,20' }),
+  () => itNum({ st: SD, again: MUL_SACH[2], intro: '🥤 100 ml Cola enthalten 11,5 g Zucker. Marvin trinkt 0,25 l (= 250 ml). Wie viel Zucker ist das?', q: 'Zucker', a: 28.75, unit: 'g', hint: '250 ml = 2,5 · 100 ml: 2,5 · 11,5' }),
+  () => itNum({ st: SD, again: MUL_SACH[3], intro: '📺 Ein Zoll sind 2,54 cm. Ein Tablet hat eine Diagonale von 10 Zoll. Wie viele cm sind das?', q: 'Diagonale', a: 25.4, unit: 'cm', hint: '10 · 2,54' }),
+  () => itNum({ st: SD, again: MUL_SACH[4], intro: '🚢 1 Seemeile = 1,852 km. Von Hamburg nach New York sind es 3700 Seemeilen. Wie viele km sind das?', q: 'Strecke', a: 6852.4, unit: 'km', hint: '3700 · 1,852' }),
+  () => itNum({ st: SD, again: MUL_SACH[5], intro: '🟩 Ein Rechteck ist 3,2 m lang und 0,5 m breit. Berechne den Flächeninhalt.', q: 'Fläche', a: 1.6, unit: 'm²', hint: '3,2 · 0,5' })
+];
+const ST_D = {
+  id: 'D', title: 'Multiplizieren', icon: '✖️', sub: 'Nachkommastellen zählen, Überschlag',
+  tasks: [
+    { id: 'D0', kind: 'learn', title: 'Lernen: Dezimalzahlen multiplizieren', sub: 'Erst ohne Komma, dann Stellen zählen', steps: [
+      { type: 'info', title: 'Warum funktioniert das?', html: `<p>Schreibe die Dezimalzahlen als Brüche: &nbsp; 2,3 · 1,34 = <sup>23</sup>⁄<sub>10</sub> · <sup>134</sup>⁄<sub>100</sub> = <sup>3082</sup>⁄<sub>1000</sub> = <b>3,082</b></p><p>Der Zähler 3082 ist das Produkt <b>ohne Komma</b> (23 · 134). Der Nenner 1000 bedeutet: Das Ergebnis hat <b>3 Nachkommastellen</b> – so viele wie beide Faktoren zusammen (1 + 2).</p>
+        <div class="merk"><b class="t">Merke</b>1. Multipliziere zuerst, <b>ohne auf das Komma zu achten</b>.<br>2. Setze dann das Komma so, dass das Ergebnis <b>genauso viele Nachkommastellen</b> hat wie <b>beide Faktoren zusammen</b>.</div>
+        <p><b>Beispiel:</b> 1,3 · 0,05 &nbsp;→&nbsp; 13 · 5 = 65 &nbsp;→&nbsp; 1 + 2 = 3 Nachkommastellen &nbsp;→&nbsp; <b>0,065</b> (eine Null ergänzen!)</p>` },
+      { type: 'check', title: 'Rechne', q: '1,2 · 0,4', a: 0.48, hint: '12 · 4 = 48. Nachkommastellen: 1 + 1 = 2.', expl: '1,2 · 0,4 = 0,48' },
+      { type: 'check', title: 'Rechne', q: '0,005 · 1,6', a: 0.008, hint: '5 · 16 = 80. Nachkommastellen: 3 + 1 = 4 → 0,0080.', expl: '0,005 · 1,6 = 0,0080 = 0,008' },
+      { type: 'info', title: 'Überschlag und schriftlich', html: `<p><b>48,5 · 0,45</b> &nbsp; Überschlag: 50 · 0,5 = 25. Das Ergebnis muss ungefähr 25 sein.</p><div class="row" style="gap:2rem;align-items:flex-start"><div>${kgrid(mulLines(48.5, 0.45).lines)}</div><div><p>485 · 45 = 21 825<br>Nachkommastellen: 1 + 2 = 3<br>Ergebnis: <b>21,825</b> ✓ passt zum Überschlag.</p></div></div>
+        <p class="mut">Die Teilprodukte schreibst du unter die Ziffern des zweiten Faktors: 485 · 4 endet unter der 4, 485 · 5 endet unter der 5.</p>` },
+      { type: 'check', title: 'Nachkommastellen', q: 'Wie viele Nachkommastellen hat das Ergebnis von <b>3,14 · 0,021</b> (bevor man Nullen am Ende weglässt)?', opts: ['5', '3', '2', '6'], hint: 'Zähle bei beiden Faktoren und addiere.', expl: '3,14 hat 2, 0,021 hat 3 Nachkommastellen: 2 + 3 = 5.' },
+      { type: 'check', title: 'Achtung, Falle!', q: '0,25 · 0,4', a: 0.1, hint: '25 · 4 = 100. Nachkommastellen: 2 + 1 = 3 → 0,100.', expl: '0,25 · 0,4 = 0,100 = 0,1. Die Nullen am Ende darf man weglassen.' },
+      { type: 'heft', title: 'Heft-Eintrag: Multiplizieren', task: 'Schreibe den <b>Merksatz</b>, das Beispiel <b>1,3 · 0,05</b> und die <b>schriftliche Rechnung 48,5 · 0,45 mit Überschlag</b> in dein Heft.', html: `<b><u>Multiplizieren von Dezimalzahlen</u></b><br>1. Ohne Komma multiplizieren.<br>2. Komma setzen: so viele Nachkommastellen wie beide Faktoren zusammen.<br>1,3 · 0,05: 13 · 5 = 65; 1 + 2 = 3 Stellen → <b>0,065</b><br>Überschlag: 50 · 0,5 = 25 ${kgrid(mulLines(48.5, 0.45).lines)}48,5 · 0,45 = <b>21,825</b>` }
+    ] },
+    { id: 'D1', lvl: 1, stars: 3, title: 'Kopfrechnen', sub: '0,2 · 3 · 0,4 · 0,2 · 0,03 · 5', run: h => runRound(h, findTask('D1'), { n: 8, make: () => genMulKopf() }) },
+    { id: 'D2', lvl: 2, stars: 3, title: 'Komma setzen', sub: '2,4 · 3,2 = 768 → ?', run: h => runRound(h, findTask('D2'), { n: 6, make: () => genMulKomma() }) },
+    { id: 'D3', kind: 'heft', lvl: 2, title: 'Im Heft: schriftlich multiplizieren 📷', sub: 'Ordentlich rechnen, Ergebnisse eingeben, Foto senden', cfg: { how: 'Schreibe für jede Aufgabe zuerst einen <b>Überschlag</b>. Dann rechnest du <b>schriftlich</b>: erst ohne Komma, die Teilprodukte genau unter die Ziffern des zweiten Faktors. Zum Schluss zählst du die <b>Nachkommastellen</b> und setzt das Komma.', hint: 'Prüfe die Teilprodukte und die Anzahl der Nachkommastellen.',
+      items: [[8.73, 6.4], [0.507, 9], [0.074, 5.9], [405.6, 0.78]].map(([a, b]) => ({ q: `${fmt(a)} · ${fmt(b)}`, a: R9(a * b), sol: kgrid(mulLines(a, b).lines) })) } },
+    { id: 'D4', lvl: 2, stars: 3, title: 'Schriftlich mit Überschlag', sub: 'nur das Ergebnis eingeben', run: h => runRound(h, findTask('D4'), { n: 6, make: () => genMulSchr() }) },
+    { id: 'D5', lvl: 3, stars: 3, title: 'Fehler finden 🔍', sub: 'Komma, Teilprodukte, Rechnungen', run: h => runRound(h, findTask('D5'), { n: 5, make: () => genMulFind() }) },
+    { id: 'D6', lvl: 3, stars: 3, title: 'Sachaufgaben', sub: 'Flächen, Geld, Zoll, Seemeilen', run: h => { const o = shuffle(MUL_SACH).slice(0, 5); runRound(h, findTask('D6'), { n: 5, make: i => o[i]() }); } },
+    { id: 'DT', kind: 'test', stars: 3, title: 'Test: Multiplizieren', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genMulKopf, genMulKopf, genMulKomma, genMulSchr, genMulSchr, genMulFind, genMulFind, () => pick(MUL_SACH)()] }
+  ] };
+
+/* =====================================================================
+   5 · DIVIDIEREN DURCH EINE GANZE ZAHL
+   ===================================================================== */
+const SE = 'Dividieren durch eine ganze Zahl';
+function genDivKopf() { const b = rint(2, 9), q = rint(1, 9) / 10 ** rint(1, 2) * (Math.random() < .3 ? rint(11, 15) : 1), a = R9(q * b); return itNum({ st: SE, again: genDivKopf, q: `${fmt(a)} : ${b}`, a: R9(q), hint: `Rechne ohne Komma und schiebe es dann zurück. Probe: Ergebnis · ${b} = ${fmt(a)}.` }); }
+function genDivSchr() { const b = rint(3, 15), q = dec(rint(1, 3), 0.1, 30), a = R9(q * b); return itNum({ st: SE, again: genDivSchr, q: `${fmt(a)} : ${b}`, a: q, hint: `Teile wie mit natürlichen Zahlen. <b>Setze das Komma im Ergebnis</b>, sobald du beim Teilen das Komma überschreitest. Probe: Ergebnis · ${b} = ${fmt(a)}.` }); }
+const FRAC_T = [[1, 4], [3, 5], [5, 8], [7, 20], [33, 40], [24, 25], [3, 4], [1, 8], [9, 20], [7, 25]];
+const FRAC_P = [[1, 3, '0,<span class="ov">3</span>', ['0,3', '0,33', '3,3']], [2, 3, '0,<span class="ov">6</span>', ['0,6', '0,67', '0,23']], [5, 9, '0,<span class="ov">5</span>', ['0,59', '0,5', '0,95']], [7, 9, '0,<span class="ov">7</span>', ['0,79', '0,7', '0,97']], [2, 11, '0,<span class="ov">18</span>', ['0,211', '0,18', '0,2']], [1, 6, '0,1<span class="ov">6</span>', ['0,16', '0,<span class="ov">16</span>', '0,6']], [5, 6, '0,8<span class="ov">3</span>', ['0,<span class="ov">83</span>', '0,83', '0,56']]];
+function genFrac() {
+  if (Math.random() < .55) { const [z, n] = pick(FRAC_T); return itNum({ st: SE, again: genFrac, intro: 'Schreibe den Bruch als Dezimalzahl: Teile den Zähler durch den Nenner.', q: `<span class="frac"><sup>${z}</sup>⁄<sub>${n}</sub></span>`, a: R9(z / n), hint: `Rechne ${z} : ${n}. Hänge Nullen an: ${z},000 : ${n}.` }); }
+  const [z, n, r, w] = pick(FRAC_P);
+  return itMC({ st: SE, again: genFrac, q: `Schreibe <span class="frac"><sup>${z}</sup>⁄<sub>${n}</sub></span> als Dezimalzahl. (${z} : ${n})`, right: r, wrong: w, expl: `${z} : ${n} = ${fmt(Math.floor(z / n * 1e6) / 1e6)}… Die Ziffern wiederholen sich endlos: eine <b>periodische</b> Dezimalzahl. Man schreibt einen Strich über die Periode.` });
+}
+function genDivFind() {
+  const b = rint(2, 9), q = rint(1, 9) / 10 ** rint(1, 2) + (Math.random() < .4 ? rint(1, 5) : 0), a = R9(q * b), ok = Math.random() < .3, wt = rint(0, 1);
+  const wrong = wt ? R9(q * 10) : R9(q / 10);
+  return itWFfix({ st: SE, again: genDivFind, ok, a: R9(q), stmt: `${fmt(a)} : ${b} = ${fmt(ok ? q : wrong)}`, expl: `Probe: ${fmt(q)} · ${b} = ${fmt(a)}. Achte darauf, wo du das Komma setzt.` });
+}
+const ST_E = {
+  id: 'E', title: 'Dividieren durch eine ganze Zahl', icon: '➗', sub: 'Komma setzen beim Überschreiten, periodische Zahlen',
+  tasks: [
+    { id: 'E0', kind: 'learn', title: 'Lernen: Dezimalzahl durch ganze Zahl', sub: 'Schriftlich dividieren, Brüche umwandeln', steps: [
+      { type: 'info', title: 'Komma setzen', html: `<p><b>8,4 : 7</b> &nbsp; Man kann 84 : 7 = 12 rechnen. 8,4 ist der 10. Teil von 84, also ist das Ergebnis auch der 10. Teil: <b>8,4 : 7 = 1,2</b>.</p>
+        <p>Schriftlich sieht man: Das Komma kommt ins Ergebnis, wenn man beim Teilen <b>von den Einern zu den Zehnteln</b> geht.</p>${kgrid([{ t: '8,4:7=1,2' }, { t: '−7', u: true }, ' 14', { t: '−14', u: true }, '  0'])}
+        <div class="merk"><b class="t">Merke</b>Beim <b>schriftlichen Dividieren einer Dezimalzahl durch eine natürliche Zahl</b> dividiert man wie bei natürlichen Zahlen. <b>Beim Überschreiten des Kommas</b> setzt man im Ergebnis ein Komma.</div>` },
+      { type: 'check', title: 'Kopfrechnen', html: '<p>Tipp: 0,24 · 100 = 24 → 24 : 6 = 4 → 4 : 100 = 0,04</p>', q: '0,24 : 6', a: 0.04, hint: '24 : 6 = 4. Dann zurück: 4 : 100.', expl: '0,24 : 6 = 0,04' },
+      { type: 'info', title: 'Schriftlich – und Nullen anhängen', html: `<div class="row" style="gap:2.5rem;align-items:flex-start"><div><b>15,76 : 4</b>${kgrid([{ t: '15,76:4=3,94' }, { t: '−12', u: true }, ' 37', { t: '−36', u: true }, '  16', { t: ' −16', u: true }, '   0'])}</div><div><b>15 : 4</b> &nbsp; (Null anhängen: 15,0)${kgrid([{ t: '15,00:4=3,75' }, { t: '−12', u: true }, ' 30', { t: '−28', u: true }, '  20', { t: ' −20', u: true }, '   0'])}</div></div>
+        <p>Geht die Division nicht auf, hängt man <b>Nullen</b> an: 15 = 15,0 = 15,00. Das ändert den Wert nicht.</p>` },
+      { type: 'check', title: 'Schriftlich', q: '9,24 : 4', a: 2.31, hint: '9 : 4 = 2 Rest 1. Komma! 12 : 4 = 3, 4 : 4 = 1.', expl: '9,24 : 4 = 2,31' },
+      { type: 'heft', title: 'Heft-Eintrag 1: Schriftlich dividieren', task: 'Schreibe den <b>Merksatz</b> und die schriftliche Rechnung <b>15,76 : 4</b> in dein Heft. Markiere mit einem Pfeil die Stelle, an der du das Komma setzt.', html: `<b><u>Dividieren einer Dezimalzahl durch eine natürliche Zahl</u></b><br>Wie bei natürlichen Zahlen dividieren. Beim Überschreiten des Kommas im Ergebnis das Komma setzen.${kgrid([{ t: '15,76:4=3,94' }, { t: '−12', u: true }, ' 37', { t: '−36', u: true }, '  16', { t: ' −16', u: true }, '   0'])}` },
+      { type: 'info', title: 'Brüche als Dezimalzahl', html: `<p>Ein Bruch ist eine Division: <b><sup>3</sup>⁄<sub>4</sub> = 3 : 4 = 0,75</b>. Die Division hört auf: <b>abbrechende Dezimalzahl</b>.</p><p><b><sup>1</sup>⁄<sub>3</sub> = 1 : 3 = 0,3333…</b> Die 3 wiederholt sich endlos. Man schreibt <b>0,<span class="ov">3</span></b> und spricht: „Null Komma Periode drei“. Das ist eine <b>periodische Dezimalzahl</b>.</p><p><sup>2</sup>⁄<sub>11</sub> = 2 : 11 = 0,1818… = <b>0,<span class="ov">18</span></b> &nbsp;·&nbsp; <sup>1</sup>⁄<sub>6</sub> = 0,1666… = <b>0,1<span class="ov">6</span></b></p>` },
+      { type: 'check', title: 'Periode', q: 'Wie schreibt man <b><sup>5</sup>⁄<sub>9</sub></b> als Dezimalzahl?', opts: ['0,<span class="ov">5</span>', '0,59', '0,5', '0,95'], hint: 'Rechne 5 : 9 = 0,555…', expl: '5 : 9 = 0,555… = 0,5̅ (Periode 5)' },
+      { type: 'heft', title: 'Heft-Eintrag 2: Brüche als Dezimalzahl', task: 'Rechne <b>3 : 4</b> und <b>2 : 11</b> schriftlich in deinem Heft. Schreibe die Fachbegriffe <b>abbrechend</b> und <b>periodisch</b> dazu.', html: `<b><u>Brüche als Dezimalzahl</u></b><br><sup>3</sup>⁄<sub>4</sub> = 3 : 4 = 0,75 → <b>abbrechende</b> Dezimalzahl<br><sup>2</sup>⁄<sub>11</sub> = 2 : 11 = 0,1818… = 0,<span class="ov">18</span> → <b>periodische</b> Dezimalzahl` }
+    ] },
+    { id: 'E1', lvl: 1, stars: 3, title: 'Kopfrechnen', sub: '0,9 : 3 · 12,6 : 6 · 0,08 : 4', run: h => runRound(h, findTask('E1'), { n: 8, make: () => genDivKopf() }) },
+    { id: 'E2', kind: 'heft', lvl: 2, title: 'Im Heft: schriftlich dividieren 📷', sub: 'Ordentlich rechnen, Ergebnisse eingeben, Foto senden', cfg: { how: 'Rechne jede Aufgabe <b>schriftlich</b> wie im Beispiel. Setze das <b>Komma im Ergebnis</b>, sobald du das Komma überschreitest. Mache am Ende die <b>Probe</b> (Ergebnis · Teiler).', hint: 'Hast du das Komma beim Überschreiten gesetzt? Mache die Probe.',
+      items: [[24.5, 5], [9.24, 4], [64.8, 12], [43.6, 8]].map(([a, b]) => ({ q: `${fmt(a)} : ${b}`, a: R9(a / b) })) } },
+    { id: 'E3', lvl: 2, stars: 3, title: 'Schriftlich dividieren', sub: 'nur das Ergebnis eingeben', run: h => runRound(h, findTask('E3'), { n: 6, make: () => genDivSchr() }) },
+    { id: 'E4', lvl: 2, stars: 3, title: 'Brüche als Dezimalzahl', sub: 'abbrechend oder periodisch', run: h => runRound(h, findTask('E4'), { n: 7, make: () => genFrac() }) },
+    { id: 'E5', lvl: 3, stars: 3, title: 'Fehler finden 🔍', sub: '0,5 : 5 = 0,01?', run: h => runRound(h, findTask('E5'), { n: 6, make: () => genDivFind() }) },
+    { id: 'ET', kind: 'test', stars: 3, title: 'Test: Dividieren durch eine ganze Zahl', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genDivKopf, genDivKopf, genDivSchr, genDivSchr, genFrac, genFrac, genDivFind, genDivFind] }
+  ] };
+
+/* =====================================================================
+   6 · DIVIDIEREN VON DEZIMALZAHLEN
+   ===================================================================== */
+const SF = 'Dividieren von Dezimalzahlen';
+function shiftPair(a, b) { const k = dp(b); return [R9(a * 10 ** k), R9(b * 10 ** k), k]; }
+function genShift() {
+  const b = dec(rint(1, 3), 0.01, 3), q = dec(rint(0, 1), 1, 40), a = R9(q * b), [A, B, k] = shiftPair(a, b);
+  const wrong = [`${fmt(a)} : ${fmt(B)}`, `${fmt(R9(a / 10 ** k))} : ${fmt(B)}`, `${fmt(R9(A * 10))} : ${fmt(R9(B * 10))}`].filter((x, i, arr) => arr.indexOf(x) === i && x !== `${fmt(A)} : ${fmt(B)}`);
+  return itMC({ st: SF, again: genShift, q: `Verschiebe das Komma bei beiden Zahlen gleich, bis du durch eine <b>ganze Zahl</b> teilst. Welche Aufgabe entsteht?<div class="stmtbig">${fmt(a)} : ${fmt(b)}</div>`, right: `${fmt(A)} : ${fmt(B)}`, wrong, row: false, expl: `${fmt(b)} hat ${k} Nachkommastelle(n). Beide Kommas wandern ${k} Stelle(n) nach rechts: ${fmt(A)} : ${fmt(B)}.` });
+}
+function genDecKopf() { const b = pick([0.2, 0.4, 0.5, 0.7, 0.8, 0.9, 0.04, 0.05, 0.03, 1.2, 0.6]), q = pick([2, 3, 4, 5, 6, 7, 8, 9, 0.5, 1.5, 20, 30]), a = R9(q * b); return itNum({ st: SF, again: genDecKopf, q: `${fmt(a)} : ${fmt(b)}`, a: q, hint: `Verschiebe beide Kommas um ${dp(b)} Stelle(n): ${fmt(R9(a * 10 ** dp(b)))} : ${fmt(R9(b * 10 ** dp(b)))}.` }); }
+function genDecSchr() { const b = dec(1, 0.3, 2.5), q = dec(rint(1, 2), 1, 30), a = R9(q * b), [A, B] = shiftPair(a, b); return itNum({ st: SF, again: genDecSchr, q: `${fmt(a)} : ${fmt(b)}`, a: q, hint: `Erst Kommas verschieben: ${fmt(A)} : ${fmt(B)}. Dann schriftlich teilen.` }); }
+function genDecFind() {
+  const b = pick([0.06, 0.6, 1.2, 0.02, 0.4, 0.5, 0.3]), q = pick([8, 1.2, 5, 6.2, 0.4, 70, 3.5]), a = R9(q * b), ok = Math.random() < .3, wrong = Math.random() < .5 ? R9(q / 10) : R9(q * 10);
+  return itWFfix({ st: SF, again: genDecFind, ok, a: q, stmt: `${fmt(a)} : ${fmt(b)} = ${fmt(ok ? q : wrong)}`, expl: `Kommas gleich verschieben: ${fmt(R9(a * 10 ** dp(b)))} : ${fmt(R9(b * 10 ** dp(b)))} = ${fmt(q)}. Probe: ${fmt(q)} · ${fmt(b)} = ${fmt(a)}.` });
+}
+const DIV_SACH = [
+  () => itNum({ st: SF, again: DIV_SACH[0], intro: '🍯 Ein Imker hat 90 kg Honig. Wie viele Dosen zu je 0,75 kg kann er füllen?', q: 'Dosen', a: 120, hint: '90 : 0,75 = 9000 : 75' }),
+  () => itNum({ st: SF, again: DIV_SACH[1], intro: '🎞 Frischhaltefolie ist 0,05 mm dick. Eine Rolle ist 8 mm dick gewickelt. Wie viele Lagen sind das?', q: 'Lagen', a: 160, hint: '8 : 0,05 = 800 : 5' }),
+  () => itNum({ st: SF, again: DIV_SACH[2], intro: '🥤 Eine Flasche enthält 1,5 l Saft. Wie viele 0,2-l-Gläser kann man <b>ganz voll</b> machen?', q: 'volle Gläser', a: 7, hint: '1,5 : 0,2 = 7,5 – aber nur ganze Gläser zählen!' }),
+  () => itNum({ st: SF, again: DIV_SACH[3], intro: '🚚 Auf einer Baustelle braucht man 15,5 m³ Kies. Ein Lkw lädt 2,5 m³. Wie oft muss er <b>mindestens</b> fahren?', q: 'Fahrten', a: 7, hint: '15,5 : 2,5 = 6,2 – also reichen 6 Fahrten nicht.' }),
+  () => itNum({ st: SF, again: DIV_SACH[4], intro: '🧻 Eine Rolle Küchentücher ist 12,5 m lang. Ein Blatt ist 0,25 m lang. Wie viele Blätter hat die Rolle?', q: 'Blätter', a: 50, hint: '12,5 : 0,25 = 1250 : 25' }),
+  () => itNum({ st: SF, again: DIV_SACH[5], intro: '💶 Eine Wohnung mit 98,5 m² kostet 512,20 € Miete. Wie viel kostet 1 m²?', q: 'Preis pro m²', a: 5.2, unit: '€', hint: '512,20 : 98,5 = 5122 : 985' })
+];
+const ST_F = {
+  id: 'F', title: 'Dividieren von Dezimalzahlen', icon: '🔀', sub: 'Beide Kommas gleich verschieben',
+  tasks: [
+    { id: 'F0', kind: 'learn', title: 'Lernen: Durch eine Dezimalzahl teilen', sub: 'Gleichsinnige Kommaverschiebung', steps: [
+      { type: 'info', title: 'Der Quotient bleibt gleich', html: `<p>2000 : 500 = <b>4</b> &nbsp;·&nbsp; 200 : 50 = <b>4</b> &nbsp;·&nbsp; 20 : 5 = <b>4</b> &nbsp;·&nbsp; 2 : 0,5 = <b>4</b> &nbsp;·&nbsp; 0,2 : 0,05 = <b>4</b></p><p>Der Quotient ändert sich <b>nicht</b>, wenn man bei <b>beiden</b> Zahlen das Komma um gleich viele Stellen in die <b>gleiche Richtung</b> verschiebt.</p>
+        <div class="merk"><b class="t">Merke</b>Beim <b>Dividieren von Dezimalzahlen</b> verschiebt man das Komma bei <b>beiden Zahlen</b> um so viele Stellen nach rechts, bis die Zahl, durch die man teilt, eine <b>ganze Zahl</b> ist. Dann rechnet man wie bisher.</div>
+        <p>0,384 : 0,12 = 38,4 : 12 = <b>3,2</b></p>` },
+      { type: 'check', title: 'Kommas verschieben', q: 'Welche Aufgabe entsteht aus <b>0,72 : 1,2</b>?', opts: ['7,2 : 12', '0,72 : 12', '72 : 12', '7,2 : 1,2'], hint: 'Beide Kommas um gleich viele Stellen – bis 1,2 eine ganze Zahl ist.', expl: '1,2 hat eine Nachkommastelle: 7,2 : 12 = 0,6.' },
+      { type: 'check', title: 'Rechne', q: '20 : 0,4', a: 50, hint: '20 : 0,4 = 200 : 4', expl: '200 : 4 = 50' },
+      { type: 'info', title: 'Nullen anhängen', html: `<p>Hat die Zahl, durch die man teilt, mehr Nachkommastellen, hängt man beim anderen Nullen an:</p><p>4,62 : 0,028 = 4620 : 28 = <b>165</b></p><p>15 : 1,25 = 1500 : 125 = <b>12</b> ${kgrid([{ t: '1500:125=12' }, { t: '−125', u: true }, '  250', { t: ' −250', u: true }, '    0'])}</p>` },
+      { type: 'check', title: 'Rechne', q: '0,72 : 1,2', a: 0.6, hint: '7,2 : 12', expl: '7,2 : 12 = 0,6' },
+      { type: 'heft', title: 'Heft-Eintrag: Dividieren von Dezimalzahlen', task: 'Schreibe den <b>Merksatz</b> und die drei Beispiele in dein Heft. Zeichne die Kommaverschiebung mit kleinen Bögen ein.', html: `<b><u>Dividieren von Dezimalzahlen</u></b><br>Komma bei <b>beiden</b> Zahlen gleich weit nach rechts verschieben, bis man durch eine ganze Zahl teilt.<br>20 : 0,4 = 200 : 4 = 50<br>0,72 : 1,2 = 7,2 : 12 = 0,6<br>15 : 1,25 = 1500 : 125 = 12` }
+    ] },
+    { id: 'F1', lvl: 2, stars: 3, title: 'Kommas verschieben', sub: 'Welche Aufgabe entsteht?', run: h => runRound(h, findTask('F1'), { n: 6, make: () => genShift() }) },
+    { id: 'F2', lvl: 1, stars: 3, title: 'Kopfrechnen', sub: '0,6 : 0,2 · 5,4 : 0,9 · 0,01 : 0,2', run: h => runRound(h, findTask('F2'), { n: 8, make: () => genDecKopf() }) },
+    { id: 'F3', kind: 'heft', lvl: 2, title: 'Im Heft: schriftlich dividieren 📷', sub: 'Ordentlich rechnen, Ergebnisse eingeben, Foto senden', cfg: { how: 'Schreibe zuerst die <b>neue Aufgabe</b> nach der Kommaverschiebung auf (z. B. 4,92 : 0,4 = 49,2 : 4). Rechne dann <b>schriftlich</b>. Mache die <b>Probe</b>.', hint: 'Hast du bei beiden Zahlen das Komma gleich weit verschoben?',
+      items: [[4.92, 0.4], [1.488, 0.6], [2.43, 0.9], [27.318, 0.087]].map(([a, b]) => ({ q: `${fmt(a)} : ${fmt(b)}`, a: R9(a / b) })) } },
+    { id: 'F4', lvl: 2, stars: 3, title: 'Schriftlich dividieren', sub: 'nur das Ergebnis eingeben', run: h => runRound(h, findTask('F4'), { n: 6, make: () => genDecSchr() }) },
+    { id: 'F5', lvl: 3, stars: 3, title: 'Fehler finden 🔍', sub: '0,48 : 0,06 = 0,8?', run: h => runRound(h, findTask('F5'), { n: 6, make: () => genDecFind() }) },
+    { id: 'F6', lvl: 3, stars: 3, title: 'Sachaufgaben', sub: 'Honig, Folie, Gläser, Kies', run: h => { const o = shuffle(DIV_SACH).slice(0, 5); runRound(h, findTask('F6'), { n: 5, make: i => o[i]() }); } },
+    { id: 'FT', kind: 'test', stars: 3, title: 'Test: Dividieren von Dezimalzahlen', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genShift, genDecKopf, genDecKopf, genDecSchr, genDecSchr, genDecFind, genDecFind, () => pick(DIV_SACH)()] }
+  ] };
+
+/* =====================================================================
+   7 · VERBINDUNG DER RECHENARTEN
+   ===================================================================== */
+const SG = 'Verbindung der Rechenarten';
+function genPunkt() {
+  const f = rint(0, 3), a = dec(1, 0.2, 5), b = rint(2, 9), c = dec(1, 0.5, 9), d = dec(1, 0.2, 2);
+  const F = [[`${fmt(a)} · ${b} − ${fmt(c)}`, a * b - c, `${fmt(R9(a * b))} − ${fmt(c)}`], [`${fmt(c)} − ${fmt(a)} · ${b}`, c - a * b, `${fmt(c)} − ${fmt(R9(a * b))}`], [`${fmt(a)} · ${b} + ${fmt(d)} · 10`, a * b + d * 10, `${fmt(R9(a * b))} + ${fmt(R9(d * 10))}`], [`${fmt(R9(a * b))} : ${b} + ${fmt(c)}`, a + c, `${fmt(a)} + ${fmt(c)}`]][f];
+  return itNum({ st: SG, again: genPunkt, q: F[0], a: R9(F[1]), hint: `<b>Punkt vor Strich!</b> ${F[0]} = ${F[2]}` });
+}
+const GESCHICKT = [
+  () => { const x = rint(12, 60), a = dec(2, 0.05, 0.95); return itNum({ st: SG, again: GESCHICKT[0], q: `${x} · ${fmt(a)} + ${fmt(R9(1 - a))} · ${x}`, a: x, hint: `Ausklammern: ${x} · (${fmt(a)} + ${fmt(R9(1 - a))}) = ${x} · 1` }); },
+  () => { const x = dec(1, 1, 9); return itNum({ st: SG, again: GESCHICKT[1], q: `0,2 · ${fmt(x)} · 50`, a: R9(x * 10), hint: `Vertauschen: 0,2 · 50 = 10. Also 10 · ${fmt(x)}.` }); },
+  () => { const x = rint(3, 40); return itNum({ st: SG, again: GESCHICKT[2], q: `0,25 · ${x} · 4`, a: x, hint: '0,25 · 4 = 1' }); },
+  () => { const a = rint(2, 9) * 5, b = dec(1, 0.5, 4); return itNum({ st: SG, again: GESCHICKT[3], q: `(${a} − ${fmt(b)}) · 4`, a: R9((a - b) * 4), hint: `Ausmultiplizieren: ${a} · 4 − ${fmt(b)} · 4 = ${a * 4} − ${fmt(R9(b * 4))}` }); },
+  () => { const x = dec(1, 1, 9), a = dec(1, 1, 5); return itNum({ st: SG, again: GESCHICKT[4], q: `${fmt(x)} · ${fmt(a)} + ${fmt(x)} · ${fmt(R9(10 - a))}`, a: R9(x * 10), hint: `Ausklammern: ${fmt(x)} · (${fmt(a)} + ${fmt(R9(10 - a))}) = ${fmt(x)} · 10` }); }
+];
+function genPunktFind() {
+  const a = dec(1, 1, 6), b = dec(1, 0.5, 2), c = rint(2, 9), ok = Math.random() < .3, right = R9(a - b * c), wrong = R9((a - b) * c);
+  return itWFfix({ st: SG, again: genPunktFind, ok, a: right, stmt: `${fmt(a)} − ${fmt(b)} · ${c}<br>= ${ok ? `${fmt(a)} − ${fmt(R9(b * c))}` : `${fmt(R9(a - b))} · ${c}`}<br>= ${fmt(ok ? right : wrong)}`, expl: `<b>Punkt vor Strich:</b> zuerst ${fmt(b)} · ${c} = ${fmt(R9(b * c))}, dann ${fmt(a)} − ${fmt(R9(b * c))} = ${fmt(right)}.` });
+}
+const ST_G = {
+  id: 'G', title: 'Verbindung der Rechenarten', icon: '🧮', sub: 'Punkt vor Strich, geschickt rechnen',
+  tasks: [
+    { id: 'G0', kind: 'learn', title: 'Lernen: Punkt vor Strich und Rechenvorteile', sub: 'Reihenfolge und Tricks', steps: [
+      { type: 'info', title: 'Die Reihenfolge', html: `<div class="merk"><b class="t">Merke</b>1. <b>Klammern</b> zuerst.<br>2. <b>Punkt vor Strich</b>: · und : vor + und −.<br>3. Sonst von <b>links nach rechts</b>.</div><p>2,6 − 1,5 · 8 = 2,6 − 12 = <b>−9,4</b><br>0,5 · 1,3 + 0,08 · 60 = 0,65 + 4,8 = <b>5,45</b><br>0,4 · (6 − 1,5) = 0,4 · 4,5 = <b>1,8</b></p>` },
+      { type: 'check', title: 'Rechne', q: '1,2 · 5 − 2,8', a: 3.2, hint: 'Zuerst 1,2 · 5 = 6.', expl: '6 − 2,8 = 3,2' },
+      { type: 'info', title: 'Geschickt rechnen', html: `<p><b>Ausklammern:</b> 31 · 0,24 + 0,76 · 31 = 31 · (0,24 + 0,76) = 31 · 1 = <b>31</b></p><p><b>Vertauschen:</b> 0,2 · 4,3 · 50 = 0,2 · 50 · 4,3 = 10 · 4,3 = <b>43</b></p><p><b>Ausmultiplizieren:</b> (25 − 2,5) · 4 = 25 · 4 − 2,5 · 4 = 100 − 10 = <b>90</b></p>` },
+      { type: 'check', title: 'Geschickt rechnen', q: '0,25 · 13 · 4', a: 13, hint: '0,25 · 4 = 1', expl: '0,25 · 4 · 13 = 1 · 13 = 13' },
+      { type: 'heft', title: 'Heft-Eintrag: Verbindung der Rechenarten', task: 'Schreibe die <b>Regeln</b> und <b>je ein Beispiel</b> für Punkt vor Strich und für geschicktes Rechnen in dein Heft.', html: `<b><u>Verbindung der Rechenarten</u></b><br>Klammer zuerst – Punkt vor Strich – links nach rechts<br>2,6 − 1,5 · 8 = 2,6 − 12 = −9,4<br>Ausklammern: 31 · 0,24 + 0,76 · 31 = 31 · 1 = 31<br>Vertauschen: 0,2 · 4,3 · 50 = 10 · 4,3 = 43` }
+    ] },
+    { id: 'G1', lvl: 2, stars: 3, title: 'Punkt vor Strich', sub: '1,2 · 5 − 2,8 · 0,4 · 0,4 − 0,06', run: h => runRound(h, findTask('G1'), { n: 6, make: () => genPunkt() }) },
+    { id: 'G2', lvl: 3, stars: 3, title: 'Geschickt rechnen', sub: 'Ausklammern, Vertauschen', run: h => { const o = shuffle(GESCHICKT); runRound(h, findTask('G2'), { n: 5, make: i => o[i]() }); } },
+    { id: 'G3', lvl: 3, stars: 3, title: 'Fehler finden 🔍', sub: 'Wurde Punkt vor Strich beachtet?', run: h => runRound(h, findTask('G3'), { n: 5, make: () => genPunktFind() }) },
+    { id: 'GT', kind: 'test', stars: 3, title: 'Test: Verbindung der Rechenarten', sub: '8 Aufgaben · ein Versuch pro Aufgabe', gens: [genPunkt, genPunkt, genPunkt, () => pick(GESCHICKT)(), () => pick(GESCHICKT)(), genPunktFind, genPunktFind, genMulKopf] }
+  ] };
+
+const STATIONS = [ST_A, ST_B, ST_C, ST_D, ST_E, ST_F, ST_G];
+/* Aufgaben vorbereiten: Sterne zählen, Läufer setzen */
+STATIONS.forEach(st => st.tasks.forEach(t => {
+  if (t.kind === 'learn') { lessonPrep(t); t.run = h => runLesson(h, t); }
+  if (t.kind === 'heft') { t.stars = t.cfg.items.length + 1; t.foto = true; t.run = h => runHeftTask(h, t); }
+  if (t.kind === 'test') t.run = h => { const o = shuffle(t.gens); runRound(h, t, { exam: true, n: 8, make: i => o[i](), th: [7, 5, 3] }); };
+}));
+
+/* Stern für ein Foto, das später gesendet wurde */
+function fotoStar(key) {
+  for (const st of STATIONS) for (const t of st.tasks) {
+    if (t.kind === 'learn') { const s = t.steps.find(x => x.key === key); if (s) return s.star; }
+    if (t.kind === 'heft' && t.id === key) return t.id + '.' + (t.cfg.items.length + 1);
+  }
+  return key;
+}
+/* ---------- Start ---------- */
+$('#brand').addEventListener('click', () => { if (ST) showHome(); });
+$('#logout').addEventListener('click', () => { if (ST) { saveLocal(); sync(); } showLogin(); });
+showLogin();
+</script>
+</body>
+</html>
