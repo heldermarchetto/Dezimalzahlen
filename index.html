@@ -333,7 +333,7 @@ const GLOSS = {
   'Übertrag': 'carry', 'untereinander': 'one below the other', 'Überschlag': 'estimate', 'Faktoren': 'factors', 'Produkt': 'product', 'Quotient': 'quotient', 'Teilprodukt': 'partial product', 'Teilprodukte': 'partial products',
   'Zehnerpotenz': 'power of ten', 'Zehnerpotenzen': 'powers of ten', 'Vorzeichen': 'sign (+ or −)', 'periodische': 'recurring', 'periodisch': 'recurring', 'abbrechende': 'terminating', 'abbrechend': 'terminating', 'Periode': 'repeating digits',
   'Klammer': 'bracket', 'Minusklammer': 'bracket with a minus in front', 'vertauschen': 'swap', 'Ausklammern': 'factorising', 'Ausmultiplizieren': 'expanding', 'Punkt vor Strich': 'multiply/divide before add/subtract',
-  'Arbeitsheft': 'workbook', 'Heft': 'exercise book', 'ordentlich': 'neatly', 'Merksatz': 'rule to remember', 'Probe': 'check (inverse calculation)', 'auffüllen': 'fill up', 'Bruch': 'fraction', 'Zähler': 'numerator', 'Nenner': 'denominator'
+  'Heft': 'workbook', 'Heft': 'exercise book', 'ordentlich': 'neatly', 'Merksatz': 'rule to remember', 'Probe': 'check (inverse calculation)', 'auffüllen': 'fill up', 'Bruch': 'fraction', 'Zähler': 'numerator', 'Nenner': 'denominator'
 };
 const GLRE = new RegExp('(^|[^A-Za-zÄÖÜäöüß])(' + Object.keys(GLOSS).sort((a, b) => b.length - a.length).join('|') + ')(?![A-Za-zÄÖÜäöüß])', 'g');
 /* T(): markiert Fachwörter im Text. Antippen zeigt die englische Bedeutung. */
@@ -488,7 +488,7 @@ function showHome() {
   const hero = el('div', { class: 'card hero' },
     el('div', `<div class="big">⭐ ${tot} / ${mx}</div><div class="mut">Sterne von ${ST.user.name}</div>`),
     el('div', { style: 'flex:1;min-width:220px' }, el('div', tot >= mx ? '<b>Alle Sterne – unglaublich! 🏆</b>' : tot >= .8 * mx ? '<b>Über 80 % – super! Das ist dein Ziel. 🎉</b> Alles darüber ist ein Bonus.' : tot === 0 ? '<b>Willkommen!</b> Wähle ein Kapitel. Du kannst frei wählen.' : '<b>Weiter so!</b> Wähle ein Kapitel.'), el('div', { class: 'bar goal', html: `<i style="width:${100 * tot / mx}%"></i><b style="left:80%" title="Ziel: 80 %"></b>` }), el('div', { class: 'mut', style: 'font-size:.9rem;margin-top:.3rem', html: `🎯 Ziel: <b>80 %</b> = ${Math.ceil(.8 * mx)} Sterne` })));
-  main.append(el('div', { class: 'card legend', html: T('<b>So funktioniert es:</b> Jedes Kapitel hat <b>📖 Lernen</b> (mit Pflicht-Einträgen ✏️ ins Arbeitsheft), <b>Übungen</b> und einen <b>kleinen Test</b>. Den Test kannst du so oft wiederholen, wie du willst.<br><b>Schwierigkeit:</b> 🟢 leicht · 🟡 mittel · 🔴 schwer. <b>Die schweren Aufgaben sind wirklich schwer. Es ist völlig in Ordnung, wenn du sie nicht schaffst!</b> Niemand muss 100 % erreichen – <b>80 % der Sterne sind ein super Ergebnis.</b>') }));
+  main.append(el('div', { class: 'card legend', html: T('<b>So funktioniert es:</b> Jedes Kapitel hat <b>📖 Lernen</b> (mit Pflicht-Einträgen ✏️ ins Heft), <b>Übungen</b> und einen <b>kleinen Test</b>. Den Test kannst du so oft wiederholen, wie du willst.<br><b>Schwierigkeit:</b> 🟢 leicht · 🟡 mittel · 🔴 schwer. <b>Die schweren Aufgaben sind wirklich schwer. Es ist völlig in Ordnung, wenn du sie nicht schaffst!</b> Niemand muss 100 % erreichen – <b>80 % der Sterne sind ein super Ergebnis.</b>') }));
   main.append(hero);
   const grid = el('div', { class: 'grid' });
   STATIONS.forEach((st, i) => {
@@ -883,7 +883,7 @@ function lessonPrep(t) { let k = 0, h = 0; t.steps.forEach(s => { if (s.type ===
 function runLesson(host, t) {
   let i = 0;
   const nav = el('div', { class: 'lnav' }), card = el('div', { class: 'card lcard' }), foot = el('div', { class: 'row', style: 'justify-content:space-between;margin-top:.8rem' });
-  host.append(el('div', { class: 'card', style: 'margin-bottom:.6rem', html: T('📖 <b>Lernen:</b> Lies jede Seite genau. ❓ = Frage (⭐) · ✏️ = <b>Pflicht:</b> ins Arbeitsheft schreiben und fotografieren (⭐). Du kannst oben jede Seite direkt antippen.') }), nav, card, foot);
+  host.append(el('div', { class: 'card', style: 'margin-bottom:.6rem', html: T('📖 <b>Lernen:</b> Lies jede Seite genau. ❓ = Frage (⭐) · ✏️ = <b>Pflicht:</b> ins Heft schreiben und fotografieren (⭐). Du kannst oben jede Seite direkt antippen.') }), nav, card, foot);
   const icon = s => s.type === 'info' ? '📖' : s.type === 'check' ? '❓' : '✏️';
   function drawNav() {
     nav.innerHTML = '';
@@ -923,7 +923,7 @@ function runLesson(host, t) {
     card.append(fb);
   }
   function drawHeft(s) {
-    card.append(el('div', { class: 'pflicht', html: '⚠️ <b>Pflicht-Eintrag ins Arbeitsheft</b> – deine Lehrkraft sieht dein Foto.' }));
+    card.append(el('div', { class: 'pflicht', html: '⚠️ <b>Pflicht-Eintrag ins Heft</b> – deine Lehrkraft sieht dein Foto.' }));
     card.append(el('div', { class: 'ltext', html: T(s.task) }), el('div', { class: 'heftbox', html: s.html }), el('div', { html: HEFTRULES }));
     const f = el('div'); card.append(f);
     fotoBlock(f, s.key, s.star, () => drawNav(), s.title);
@@ -934,7 +934,7 @@ function runLesson(host, t) {
 /* Heft-Aufgaben mit Foto: erst im Heft rechnen (ordentlich!), Ergebnisse eingeben, Foto senden */
 function runHeftTask(host, t) {
   const c = t.cfg;
-  host.append(el('div', { class: 'card', style: 'margin-bottom:.7rem', html: T('📷 <b>Diese Aufgaben sind besonders wichtig.</b> Rechne sie <b>schriftlich in deinem Arbeitsheft</b> – genau so, wie du es gelernt hast. Dann gibst du die Ergebnisse ein und fotografierst deine Rechnungen. Später reicht es, nur das Ergebnis einzugeben.') }));
+  host.append(el('div', { class: 'card', style: 'margin-bottom:.7rem', html: T('📷 <b>Diese Aufgaben sind besonders wichtig.</b> Rechne sie <b>schriftlich in deinem Heft</b> – genau so, wie du es gelernt hast. Dann gibst du die Ergebnisse ein und fotografierst deine Rechnungen. Später reicht es, nur das Ergebnis einzugeben.') }));
   const wrap = el('div', { class: 'two' }), L = el('div', { class: 'panel' }), Rr = el('div', { class: 'panel' }); wrap.append(L, Rr); host.append(wrap);
   L.append(el('div', { class: 'card heftcard' }, el('h3', '✏️ Rechne im Heft'), el('div', { html: T(c.how) }), el('div', { html: HEFTRULES })));
   const list = el('div', { class: 'card', style: 'display:grid;gap:.7rem' }, el('h3', '🔢 Deine Ergebnisse'));
@@ -1063,7 +1063,7 @@ const ST_A = {
       { type: 'check', title: 'Welche Schreibweise ist richtig?', q: 'Du willst <b>45,6 + 9,0132</b> rechnen. Welche Schreibweise ist richtig?', opts: [kgrid([' 45,6000', { t: '+ 9,0132', u: true }]), kgrid(['   45,6', { t: '+9,0132', u: true }]), kgrid([' 45,6', { t: '+9,0132', u: true }])], hint: 'Euro unter Euro, Cent unter Cent: Komma unter Komma!', expl: 'Komma unter Komma – und die fehlenden Stellen mit Nullen auffüllen.' },
       { type: 'check', title: 'Rechne', q: '3,28 + 4,27', a: 7.55, hint: 'Komma unter Komma! 8 + 7 = 15 → Übertrag.', expl: '3,28 + 4,27 = 7,55' },
       { type: 'check', title: 'Rechne', q: '8,71 − 3,6', a: 5.11, hint: 'Schreibe 3,6 als 3,60. Dann Komma unter Komma.', expl: '8,71 − 3,60 = 5,11' },
-      { type: 'heft', title: 'Heft-Eintrag 1: Komma unter Komma', task: 'Schreibe in dein Arbeitsheft: die <b>Überschrift</b>, den <b>Merksatz</b> und die <b>zwei Beispiele</b> schriftlich untereinander.', html: `<b><u>Addieren und Subtrahieren von Dezimalzahlen</u></b><br>1. Zahlen untereinander schreiben: Komma unter Komma.<br>2. Fehlende Stellen mit Nullen auffüllen.<br>3. Rechnen wie mit natürlichen Zahlen.<br>4. Komma im Ergebnis unter die anderen Kommas setzen.<div class="row" style="gap:2rem">${kgrid(['  12,534', { t: '+  8,910', u: true }, { t: '  21,444', c: 'res' }])}${kgrid(['  12,534', { t: '−  8,910', u: true }, { t: '   3,624', c: 'res' }])}</div>` },
+      { type: 'heft', title: 'Heft-Eintrag 1: Komma unter Komma', task: 'Schreibe in dein Heft: die <b>Überschrift</b>, den <b>Merksatz</b> und die <b>zwei Beispiele</b> schriftlich untereinander.', html: `<b><u>Addieren und Subtrahieren von Dezimalzahlen</u></b><br>1. Zahlen untereinander schreiben: Komma unter Komma.<br>2. Fehlende Stellen mit Nullen auffüllen.<br>3. Rechnen wie mit natürlichen Zahlen.<br>4. Komma im Ergebnis unter die anderen Kommas setzen.<div class="row" style="gap:2rem">${kgrid(['  12,534', { t: '+  8,910', u: true }, { t: '  21,444', c: 'res' }])}${kgrid(['  12,534', { t: '−  8,910', u: true }, { t: '   3,624', c: 'res' }])}</div>` },
       { type: 'info', title: 'Mit negativen Zahlen', html: `<p>Kommen negative Zahlen vor, gehst du vor wie bei ganzen Zahlen: <b>Zuerst bestimmst du das Vorzeichen des Ergebnisses. Dann rechnest du.</b></p>
         <table class="tbl"><tr><th>Aufgabe</th><th>Vorzeichen</th><th>Rechnung</th><th>Ergebnis</th></tr>
         <tr><td>−9,31 − 5,8</td><td>−</td><td>9,31 + 5,80 = 15,11</td><td><b>−15,11</b></td></tr>
